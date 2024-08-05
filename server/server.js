@@ -9,8 +9,8 @@ const app = express();
 app.use(
   cors({
     credentials: true,
-    origin: "https://workguru.vercel.app",
-    methods: ["POST","GET"],
+    origin: ["http://localhost:3000", "https://workguru.onrender.com"],
+    methods: ["POST", "GET"],
     optionSuccessStatus: 200,
   })
 );
