@@ -10,6 +10,7 @@ app.use(
   cors({
     credentials: true,
     origin: "https://workguru.vercel.app",
+    methods: ["POST","GET"],
     optionSuccessStatus: 200,
   })
 );
