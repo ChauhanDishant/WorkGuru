@@ -5,7 +5,7 @@ import { Helmet } from "react-helmet";
 const HomePage = () => {
   const navigate = useNavigate();
   let GetStarted = () => {
-    navigate("/options");
+    navigate("/login");
   };
   return (
     <>

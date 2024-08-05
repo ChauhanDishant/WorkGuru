@@ -65,9 +65,7 @@ const Signup = () => {
     }
 
     if (!passwordRegex.test(password)) {
-      toast.error(
-        "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one digit."
-      );
+      toast.error("Invalid format for the Password");
       return;
     }
 

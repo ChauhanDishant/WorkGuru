@@ -56,7 +56,7 @@ function App() {
           />
           <Route
             path="/business"
-            element={<ProtectedRoute element={Sidebar} />}
+            element={<ProtectedRoute element={Dashboard} />}
           />
           {/* Roles Routes */}
           <Route

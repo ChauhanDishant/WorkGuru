@@ -6,11 +6,11 @@ const OptionsPage = () => {
   const navigate = useNavigate();
 
   let Business = () => {
-    navigate("/login");
+    navigate("/business");
   };
 
   let Workers = () => {
-    navigate("/login");
+    navigate("/workers");
   };
   return (
     <>
@@ -18,17 +18,17 @@ const OptionsPage = () => {
         <title>OptionsPage</title>
       </Helmet>
       {/* Content */}
-      <div className="bg-white min-h-screen">
+      <div className="bg-white dark:bg-gray-800 min-h-screen">
         <div className="max-w-[320px] mx-auto grid grid-cols-1 items-center justify-center min-h-[100px]">
-          <h1 className="text-center font-bold sm:text-4xl text-2xl text-blue-600">
+          <h1 className="text-center font-bold sm:text-4xl text-2xl text-white">
             Your Selection
           </h1>
         </div>
 
-        <div className="max-w-[1320px] min-h-[370px] mx-auto grid md:grid-cols-2 grid-cols-1 gap-5  ">
+        <div className="max-w-[1320px] min-h-[370px] mx-auto grid md:grid-cols-2 grid-cols-1 gap-5">
           {/* Part-1 */}
           <div
-            className="bg-cover bg-center bg-no-repeat rounded shadow-lg shadow-black"
+            className="bg-cover bg-center bg-no-repeat rounded"
             style={{ backgroundImage: 'url("/BusinessSolution.jpeg")' }}
           >
             <div className="backdrop-contrast-75 bg-black bg-opacity-30 min-h-[320px] m-5 font-bold ">
@@ -41,14 +41,14 @@ const OptionsPage = () => {
                 <li>Retailers Data Handling</li>
                 <li>User-Friendly Interface</li>
               </div>
-              <div className="max-w-[140px] mx-auto bg-blue-500 text-white text-center rounded hover:bg-blue-600 sm:px-4 sm:py-2 sm:text-xl xs:py-2 xs:text-lg shadow-lg">
+              <div className="max-w-[140px] mx-auto bg-blue-500 text-white text-center rounded-md hover:bg-blue-600 sm:px-4 sm:py-2 sm:text-xl xs:py-2 xs:text-lg shadow-lg">
                 <button onClick={Business}>Enter Here</button>
               </div>
             </div>
           </div>
           {/* Part-2 */}
           <div
-            className="bg-cover bg-center bg-no-repeat rounded shadow-lg shadow-black"
+            className="bg-cover bg-center bg-no-repeat rounded"
             style={{ backgroundImage: 'url("/WorkersSolution.jpeg")' }}
           >
             <div className="backdrop-contrast-75 bg-black bg-opacity-30 min-h-[320px] m-5 font-bold">
@@ -61,7 +61,7 @@ const OptionsPage = () => {
                 <li>Types of Workers</li>
                 <li>Wages & Salary Details</li>
               </div>
-              <div className="max-w-[140px] mx-auto bg-blue-500 text-white text-center rounded hover:bg-blue-600 sm:px-4 sm:py-2 sm:text-xl xs:py-2 xs:text-lg shadow-lg">
+              <div className="max-w-[140px] mx-auto bg-blue-500 text-white text-center rounded-md hover:bg-blue-600 sm:px-4 sm:py-2 sm:text-xl xs:py-2 xs:text-lg shadow-lg">
                 <button onClick={Workers}>Enter Here</button>
               </div>
             </div>

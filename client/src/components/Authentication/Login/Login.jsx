@@ -10,17 +10,12 @@ const Login = () => {
 
   axios.defaults.baseURL = "http://localhost:5000/";
 
-  const [route, setRoute] = useState("workers");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [otp, setOtp] = useState(["", "", "", ""]);
   const [generatedOtp, setGeneratedOtp] = useState("");
   const [otpSent, setOtpSent] = useState(false);
   const [error, setError] = useState("");
-
-  const handleRoute = (event) => {
-    setRoute(event.target.value);
-  };
 
   const sendOtp = async (e) => {
     e.preventDefault();
@@ -71,7 +66,7 @@ const Login = () => {
     if (otp.join("") === generatedOtp) {
       toast.success("You have signed in Successfully");
       console.log("OTP verified! Proceeding with sign-in...");
-      route === "business" ? navigate("/business") : navigate("/workers");
+      navigate("/options");
       setError("");
     } else {
       setError("Invalid OTP. Please try again.");
@@ -119,42 +114,6 @@ const Login = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
-                  <div className="grid grid-cols-2 gap-2">
-                    <div className="w-full px-8 py-4 rounded-lg font-medium bg-white border border-gray-400 outline-none text-sm">
-                      <input
-                        id="bordered-radio-1"
-                        type="radio"
-                        value="business"
-                        name="bordered-radio"
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300"
-                        onChange={handleRoute}
-                        checked={route === "business"}
-                      />
-                      <label
-                        htmlFor="bordered-radio-1"
-                        className="w-full py-4 ms-2 text-sm font-medium text-gray-500"
-                      >
-                        Business
-                      </label>
-                    </div>
-                    <div className="w-full px-8 py-4 rounded-lg font-medium bg-white border border-gray-400 outline-none text-sm">
-                      <input
-                        id="bordered-radio-2"
-                        type="radio"
-                        value="workers"
-                        name="bordered-radio"
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300"
-                        onChange={handleRoute}
-                        checked={route === "workers"}
-                      />
-                      <label
-                        htmlFor="bordered-radio-2"
-                        className="w-full py-4 ms-2 text-sm font-medium text-gray-500"
-                      >
-                        Workers
-                      </label>
-                    </div>
-                  </div>
                   {!otpSent ? (
                     <button
                       className="mt-1 tracking-wide font-semibold bg-blue-500 text-gray-100 w-full py-4 rounded-lg hover:bg-blue-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
