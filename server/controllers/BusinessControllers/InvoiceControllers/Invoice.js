@@ -126,4 +126,56 @@ const getNextInvoiceNumber = async (req, res) => {
   }
 };
 
-module.exports = { addInvoices, getInvoices, getNextInvoiceNumber };
+const editInvoices = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    if (!userId) {
+      return res
+        .status(409)
+        .send({ message: "User not found", success: false });
+    }
+
+    const invoiceId = req.params.invoiceId;
+    const updateFields = req.body;
+    console.log(invoiceId);
+
+    // Check if there are any fields to update
+    if (Object.keys(updateFields).length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "No fields to update",
+      });
+    }
+
+    const updatedInvoice = await invoiceModel.findByIdAndUpdate(
+      invoiceId,
+      updateFields,
+      { new: true }
+    );
+    if (!updatedInvoice) {
+      return res.status(404).json({
+        success: false,
+        message: "Invoice not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Invoice Data updated successfully",
+      data: updatedInvoice,
+    });
+  } catch (error) {
+    console.error("Error updating Invoices data:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};
+
+module.exports = {
+  addInvoices,
+  getInvoices,
+  getNextInvoiceNumber,
+  editInvoices,
+};

@@ -4,8 +4,8 @@ const router = express.Router();
 const {
   addInvoices,
   getInvoices,
-  deleteInvoices,
   getNextInvoiceNumber,
+  editInvoices,
 } = require("./../../../controllers/BusinessControllers/InvoiceControllers/Invoice");
 
 const authMiddleware = require("./../../../middlewares/authMiddleware");
@@ -18,5 +18,8 @@ router.get("/listofinvoices", authMiddleware, getInvoices);
 
 // GET || GETTING Lastest Routes
 router.get("/get-next-invoice-number", authMiddleware, getNextInvoiceNumber);
+
+// PUT || Editing the Latest Routes
+router.put("/editinvoices/:invoiceId", authMiddleware, editInvoices);
 
 module.exports = router;

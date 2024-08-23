@@ -191,7 +191,7 @@ const Login = () => {
             <div
               className="m-12 xl:m-16 w-full bg-contain bg-center bg-no-repeat"
               style={{
-                backgroundImage: 'url("Login_image.svg")',
+                backgroundImage: 'url("./Login_image.svg")',
               }}
             ></div>
           </div>

@@ -27,6 +27,13 @@ import NotFound from "./components/Authentication/NotFound/NotFound";
 import WorkersSideBarPage from "./components/WorkersPage/WorkersSideBarPage/WorkersSideBarPage";
 import UserProfile from "./components/Authentication/UserProfile/UserProfile";
 import EditProfile from "./components/Authentication/EditProfile/EditProfile";
+import AddTask from "./components/WorkersPage/WorkersTaskPage/AddTask";
+import ListOfTasks from "./components/WorkersPage/WorkersTaskPage/ListOfTasks";
+import AddDepartment from "./components/WorkersPage/WorkersDepartmentPage/AddDepartment";
+import ListOfDepartments from "./components/WorkersPage/WorkersDepartmentPage/ListOfDepartments";
+import AddAttendance from "./components/WorkersPage/WorkersAttendancePage/AddAttendance";
+import ListOfAttendance from "./components/WorkersPage/WorkersAttendancePage/ListOfAttendance";
+import { EmployeeStatus } from "./components/WorkersPage/WorkersEmployeePage/EmployeeStatus.jsx";
 
 function App() {
   return (
@@ -121,6 +128,41 @@ function App() {
           <Route
             path="/workers"
             element={<ProtectedRoute element={WorkersSideBarPage} />}
+          />
+
+          {/* Tasks Routes */}
+          <Route
+            path="/workers/addtasks"
+            element={<ProtectedRoute element={AddTask} />}
+          />
+          <Route
+            path="/workers/listoftasks"
+            element={<ProtectedRoute element={ListOfTasks} />}
+          />
+
+          {/* Departments Routes */}
+          <Route
+            path="/workers/adddepartment"
+            element={<ProtectedRoute element={AddDepartment} />}
+          />
+          <Route
+            path="/workers/listofdepartments"
+            element={<ProtectedRoute element={ListOfDepartments} />}
+          />
+
+          {/* Attendance Routes */}
+          <Route
+            path="/workers/addattendance"
+            element={<ProtectedRoute element={AddAttendance} />}
+          />
+          <Route
+            path="/workers/listofattendance"
+            element={<ProtectedRoute element={ListOfAttendance} />}
+          />
+          {/* Employee Status Routes */}
+          <Route
+            path="/workers/employeestatus"
+            element={<ProtectedRoute element={EmployeeStatus} />}
           />
           {/* Catch-all route for 404 Not Found */}
           <Route path="*" element={<NotFound />} />

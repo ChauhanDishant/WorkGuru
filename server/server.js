@@ -9,8 +9,7 @@ const app = express();
 app.use(
   cors({
     credentials: true,
-    origin: ["http://localhost:3000", "https://workguru.onrender.com"],
-    methods: ["POST", "GET"],
+    origin: "http://localhost:3000",
     optionSuccessStatus: 200,
   })
 );
@@ -30,11 +29,11 @@ app.use(express.json());
 app.use(morgan("dev")); // -- app engine
 
 // Serve static files from the React app
-app.use(express.static(path.join(__dirname, "./client/build")));
+// app.use(express.static(path.join(__dirname, "../client/build")));
 
-app.get("*", function (req, res) {
-  res.sendFile(path.join(__dirname, "./client/build/index.html"));
-});
+// app.get("*", (req, res) => {
+//   res.sendFile(path.join(__dirname, "../client/build/index.html"));
+// });
 
 // ************************** routes ***********************************
 
@@ -73,6 +72,16 @@ app.use(
 );
 
 // -------------------- 2. Workers Routes ----------------------------------
+
+app.use(
+  "/workguru/workers",
+  require("./routes/WorkersRoutes/DepartmentRoutes/DepartmentRoutes")
+);
+
+app.use(
+  "/workguru/workers",
+  require("./routes/WorkersRoutes/AttendanceRoutes/AttendanceRoutes")
+);
 
 // PORT
 const PORT = process.env.PORT || 5000;

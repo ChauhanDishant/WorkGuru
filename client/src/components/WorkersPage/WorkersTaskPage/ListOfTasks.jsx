@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
-import BusinessSideBarPage from "../BusinessSideBarPage/BusinessSideBarPage";
+import WorkersSideBarPage from "../WorkersSideBarPage/WorkersSideBarPage";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { Helmet } from "react-helmet";
 
-const ListOfRoles = () => {
+const ListOfTasks = () => {
   const [roles, setRoles] = useState([]);
   const [total, setTotal] = useState(0);
   const [selected, setSelected] = useState([]);
   const [editRole, setEditRole] = useState(null);
-  const [editrolename, setEditRoleName] = useState();
+  const [edittaskname, setEditTaskName] = useState();
   const [editwages, setEditWages] = useState();
 
   // Pagination and Search
@@ -28,11 +28,11 @@ const ListOfRoles = () => {
         });
         if (res.data.success) {
           setRoles(res.data.data);
-          toast.success(res.data.message);
+          toast.success("Tasks fetched Successfully");
         }
       } catch (error) {
-        toast.error("Error fetching roles");
-        console.error("Error fetching roles:", error);
+        toast.error("Error fetching tasks");
+        console.error("Error fetching tasks:", error);
       }
     };
 
@@ -68,14 +68,14 @@ const ListOfRoles = () => {
         setRoles(roles.filter((role) => role._id !== roleId));
       }
     } catch (error) {
-      toast.error("Error deleting role");
-      console.error("Error deleting role:", error);
+      toast.error("Error deleting task");
+      console.error("Error deleting task:", error);
     }
   };
 
   const handleEdit = (role) => {
     setEditRole(role);
-    setEditRoleName(role.rolename);
+    setEditTaskName(role.rolename);
     setEditWages(role.wages);
   };
 
@@ -83,7 +83,7 @@ const ListOfRoles = () => {
     e.preventDefault();
     try {
       const updatedData = {
-        rolename: editrolename.trim(),
+        rolename: edittaskname.trim(),
         wages: parseFloat(editwages),
       };
 
@@ -103,7 +103,7 @@ const ListOfRoles = () => {
       );
 
       if (res.data.success) {
-        toast.success(res.data.message);
+        toast.success("Tasks updated Successfully");
         const updatedRoles = roles.map((role) => {
           if (role._id === editRole._id) {
             return { ...role, ...updatedData };
@@ -116,11 +116,11 @@ const ListOfRoles = () => {
       }
     } catch (error) {
       toast.error(
-        `Error updating role: ${
+        `Error updating Task: ${
           error.response?.data?.message || "Server error"
         }`
       );
-      console.error("Error updating role:", error);
+      console.error("Error updating task:", error);
     }
   };
 
@@ -138,23 +138,25 @@ const ListOfRoles = () => {
   const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
-    <BusinessSideBarPage>
+    <WorkersSideBarPage>
       <Helmet>
-        <title>Roles Section</title>
+        <title>Tasks Section</title>
       </Helmet>
 
       <div className="bg-white border rounded-lg px-8 py-6 mx-auto my-6 max-w-2xl shadow-lg">
         {editRole ? (
           <>
-            <h2 className="text-2xl font-medium mb-4 text-center">Edit Role</h2>
+            <h2 className="text-2xl font-medium mb-4 text-center">
+              Edit Tasks
+            </h2>
             <form onSubmit={handleEditSubmit}>
               <div className="mb-4">
-                <label className="block text-gray-700">Role Name</label>
+                <label className="block text-gray-700">Tasks Name</label>
                 <input
                   type="text"
                   name="rolename"
-                  value={editrolename}
-                  onChange={(e) => setEditRoleName(e.target.value)}
+                  value={edittaskname}
+                  onChange={(e) => setEditTaskName(e.target.value)}
                   className="border border-gray-300 rounded-lg p-2 w-full"
                   required
                 />
@@ -190,7 +192,7 @@ const ListOfRoles = () => {
         ) : (
           <>
             <h2 className="text-2xl font-medium mb-4 text-center">
-              List of Roles
+              List of Tasks
             </h2>
             <div className="my-2 bg-blue-500 h-[1.1px]"></div>
             <div className="rounded-lg px-2 py-6 mx-auto my-1 max-w-2xl">
@@ -198,7 +200,7 @@ const ListOfRoles = () => {
               <div className="mb-4">
                 <input
                   type="text"
-                  placeholder="Search by role name..."
+                  placeholder="Search by Tasks name..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="border border-gray-300 rounded-lg p-2 w-full"
@@ -208,7 +210,7 @@ const ListOfRoles = () => {
               <div className="mx-auto w-full max-w-2xl rounded-lg border border-gray-400 bg-white shadow-lg">
                 <header className="border-b border-gray-400 px-5 py-4 text-center">
                   <div className="font-bold text-xl text-gray-800">
-                    Manage Roles
+                    Manage Tasks
                   </div>
                 </header>
 
@@ -217,7 +219,7 @@ const ListOfRoles = () => {
                     <tr>
                       <th></th>
                       <th className="p-2">
-                        <div className="text-left font-semibold">Role Name</div>
+                        <div className="text-left font-semibold">Task Name</div>
                       </th>
                       <th className="p-2">
                         <div className="text-left font-semibold">Wages</div>
@@ -305,7 +307,7 @@ const ListOfRoles = () => {
                 </div>
 
                 <div className="mt-4 p-4 text-lg text-center">
-                  Selected Role Count: {selected.length} | Total Wages: Rs.{" "}
+                  Selected Task Count: {selected.length} | Total Wages: Rs.{" "}
                   {total}
                 </div>
               </div>
@@ -313,9 +315,8 @@ const ListOfRoles = () => {
           </>
         )}
       </div>
-    </BusinessSideBarPage>
+    </WorkersSideBarPage>
   );
 };
 
-export default ListOfRoles;
-  
+export default ListOfTasks;

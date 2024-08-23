@@ -53,7 +53,7 @@ const BusinessSideBarPage = ({ children }) => {
       <Helmet>
         <title>Business Page</title>
       </Helmet>
-      <div className="flex bg-[#f8f4f4] h-screen">
+      <div className="flex bg-white h-screen">
         <div>
           <span
             className="absolute text-white text-4xl top-5 left-4 cursor-pointer"
@@ -79,15 +79,7 @@ const BusinessSideBarPage = ({ children }) => {
               </div>
               <div className="my-2 bg-black h-[1.3px]"></div>
             </div>
-            <div className="mt-4 p-2.5 flex items-center rounded-md px-4 duration-300 cursor-pointer bg-white text-blac font-bold">
-              {/* Search Function */}
-              <i className="bi bi-search text-sm text-black font-bold"></i>
-              <input
-                type="text"
-                placeholder="Search"
-                className="text-[15px] ml-4 w-full text-black bg-transparent focus:outline-none"
-              />
-            </div>
+
             {/* Home Section */}
 
             <Link

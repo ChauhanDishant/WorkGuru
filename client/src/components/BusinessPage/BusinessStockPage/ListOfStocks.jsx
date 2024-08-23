@@ -15,6 +15,10 @@ const ListOfStocks = () => {
   const [editItemsPerSet, setEditItemsPerSet] = useState(0);
   const [edittotalQuantity, setEditTotalQuantity] = useState(0);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(5);
+  const [searchTerm, setSearchTerm] = useState("");
+
   useEffect(() => {
     const fetchStocks = async () => {
       axios.defaults.baseURL = "http://localhost:5000/";
@@ -132,6 +136,48 @@ const ListOfStocks = () => {
     }
   };
 
+  const filteredStocks = stocks.filter((stock) =>
+    stock.productname.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentStocks = filteredStocks.slice(indexOfFirstItem, indexOfLastItem);
+
+  const totalQuantity = filteredStocks.reduce(
+    (acc, stock) => acc + stock.quantity,
+    0
+  );
+
+  const Pagination = ({ itemsPerPage, totalItems, paginate, currentPage }) => {
+    const pageNumbers = [];
+
+    for (let i = 1; i <= Math.ceil(totalItems / itemsPerPage); i++) {
+      pageNumbers.push(i);
+    }
+
+    return (
+      <nav>
+        <ul className="flex justify-center space-x-2 mt-4">
+          {pageNumbers.map((number) => (
+            <li key={number}>
+              <button
+                onClick={() => paginate(number)}
+                className={`px-3 py-1 rounded-lg ${
+                  currentPage === number
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-200 text-gray-700"
+                }`}
+              >
+                {number}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    );
+  };
+
   return (
     <BusinessSideBarPage>
       <Helmet>
@@ -204,6 +250,16 @@ const ListOfStocks = () => {
                   </div>
                 </header>
 
+                <div className="mb-4 px-5 pt-4">
+                  <input
+                    type="text"
+                    placeholder="Search stocks..."
+                    className="w-full p-2 border border-gray-300 rounded-lg"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                </div>
+
                 <table className="w-full table-auto">
                   <thead className="bg-gray-50 text-xs font-semibold uppercase text-gray-400">
                     <tr>
@@ -233,7 +289,7 @@ const ListOfStocks = () => {
                   </thead>
 
                   <tbody className="divide-y divide-gray-100 text-sm">
-                    {stocks.map((stock) => (
+                    {currentStocks.map((stock) => (
                       <tr key={stock._id}>
                         <td className="p-2">
                           <input
@@ -308,11 +364,18 @@ const ListOfStocks = () => {
                   </tbody>
                 </table>
 
+                <Pagination
+                  itemsPerPage={itemsPerPage}
+                  totalItems={filteredStocks.length}
+                  paginate={setCurrentPage}
+                  currentPage={currentPage}
+                />
+
                 {/* Total Amount */}
                 <div className="flex justify-end space-x-4 border-t border-gray-100 px-5 py-4 text-2xl font-bold">
-                  <div>Total</div>
+                  <div>Total Quantity</div>
                   <div className="text-blue-600">
-                    <span>{total}</span>
+                    <span>{totalQuantity}</span>
                   </div>
                 </div>
 

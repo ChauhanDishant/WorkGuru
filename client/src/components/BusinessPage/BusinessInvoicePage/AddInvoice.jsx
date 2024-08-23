@@ -232,7 +232,7 @@ const AddInvoice = () => {
   // Getting the New Invoice Number
   useEffect(() => {
     const FetchingNextInvoiceNumber = async () => {
-      axios.defaults.baseURL = "http://localhost:5000/"
+      axios.defaults.baseURL = "http://localhost:5000/";
       try {
         // First, get the next invoice number
         const res = await axios.get(
@@ -445,6 +445,7 @@ const AddInvoice = () => {
                     type="date"
                     value={invoiceDate}
                     onChange={(e) => setInvoiceDate(e.target.value)}
+                    min={new Date().toISOString().split("T")[0]} // Set min to today's date
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500"
                   />
                 </div>

@@ -16,7 +16,7 @@ const addWorkers = async (req, res) => {
     }
 
     const newWorker = new workerModel({
-      name: req.body.name,
+      name: req.body.name,  
       age: req.body.age,
       phonenumber: req.body.phonenumber,
       email: req.body.email,
