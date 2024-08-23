@@ -388,6 +388,14 @@ const BusinessSideBarPage = ({ children }) => {
                 <h1>List Of Invoices</h1>
               </Link>
             </div>
+            <button
+              className="mt-5 px-6 py-2 text-md text-white bg-blue-500 rounded-lg hover:bg-blue-800"
+              onClick={() => {
+                window.location.href = "/workers";
+              }}
+            >
+              Workers Section
+            </button>
           </div>
         </div>
         {/* Main Content Area */}

@@ -3,7 +3,13 @@ import { DateRange } from "react-date-range";
 import { format, parseISO } from "date-fns";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
-import { FaCheck, FaTimes, FaRupeeSign } from "react-icons/fa";
+import {
+  FaCheck,
+  FaTimes,
+  FaRupeeSign,
+  FaCalendar,
+  FaCalendarCheck,
+} from "react-icons/fa";
 
 const WorkersComponents = ({ worker, attendance }) => {
   const [state, setState] = useState([
@@ -22,6 +28,14 @@ const WorkersComponents = ({ worker, attendance }) => {
         format(parseISO(record.date), "yyyy-MM-dd") ===
           format(date, "yyyy-MM-dd")
     );
+
+    if (matchedRecord && matchedRecord.leaveApproved) {
+      return (
+        <div className="absolute top-0 right-0 flex flex-col items-end">
+          <FaCalendarCheck className="text-yellow-400 text-xl" />
+        </div>
+      );
+    }
     if (matchedRecord && matchedRecord.isPresent) {
       if (matchedRecord.borrowedMoney > 0) {
         return (
@@ -67,16 +81,22 @@ const WorkersComponents = ({ worker, attendance }) => {
             </div>
           )}
         />
-        <div className="text-lg p-2 mb-4 grid grid-cols-3 gap-4">
-          <p className="flex items-center justify-center gap-2">
-            <FaCheck className="text-green-500 text-xl" />
-            <FaRupeeSign className="text-indigo-800 text-xl" />
-            Present + Borrowed
+        <div className="text-lg p-2 mb-4 grid grid-cols-[60%_auto] gap-4">
+          <p className="w-full flex items-center justify-center gap-2">
+            <div className="flex items-center">
+              <FaCheck className="text-green-500 text-xl" />
+              <FaRupeeSign className="text-indigo-800 text-xl" />
+            </div>
+            <div>Present + Borrowed</div>
           </p>
-          <p className="flex items-center justify-center gap-2">
+          <p className="w-full flex items-center justify-center gap-2">
             <FaCheck className="text-green-500 text-xl" /> Present
           </p>
-          <p className="flex items-center justify-center gap-2">
+          <p className="w-full flex items-center justify-center gap-2">
+            <FaCalendarCheck className="text-yellow-400 text-xl" /> Leave
+            Approved
+          </p>
+          <p className="w-full flex items-center justify-center gap-2">
             <FaTimes className="text-red-500 text-xl" /> Absent
           </p>
         </div>

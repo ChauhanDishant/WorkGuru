@@ -5,8 +5,11 @@ import toast from "react-hot-toast";
 import Modal from "react-modal";
 import axios from "axios";
 import ReactPaginate from "react-paginate";
-import "./modal.css";
+import "./employeemodal.css";
+import "./reportmodal.css";
 import EmployeesComponents from "./EmployeesComponents";
+import { format } from "date-fns";
+import EmployeeReport from "./EmployeeReport";
 
 // Modal settings for accessibility
 Modal.setAppElement("#root");
@@ -15,9 +18,11 @@ export const EmployeeStatus = () => {
   const [workers, setWorkers] = useState([]);
   const [filteredWorkers, setFilteredWorkers] = useState([]);
   const [totalworkers, setTotalWorkers] = useState(0);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [selectedWorker, setSelectedWorker] = useState(null);
   const [attendance, setAttendance] = useState([]);
+  const [selectedWorker, setSelectedWorker] = useState(null);
+  const [selectedAttendance, setSelectedAttendance] = useState(null);
+  const [isEmployeesModalOpen, setIsEmployeesModalOpen] = useState(false);
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
 
   // Fetching the Data of Workers
   useEffect(() => {
@@ -85,25 +90,37 @@ export const EmployeeStatus = () => {
   const handleSearch = (e) => {
     const term = e.target.value.toLowerCase();
     setSearchTerm(term);
-    const filtered = workers.filter((worker) =>
-      worker.name.toLowerCase().includes(term)
+    const filtered = workers.filter(
+      (worker) =>
+        worker.name.toLowerCase().includes(term) ||
+        worker.email.toLowerCase().includes(term)
     );
     setFilteredWorkers(filtered);
     setCurrentPage(0); // Reset to the first page on search
   };
 
   // Open modal and set the selected worker and attendance
-  const [selectedAttendance, setSelectedAttendance] = useState(null);
-  const openModal = (worker, attendance) => {
-    setSelectedAttendance(attendance); // set the Selected Attendance
-    setSelectedWorker(worker); // Set the Selected worker
-    setModalIsOpen(true);
+  const openEmployeesModal = (worker, attendance) => {
+    setSelectedWorker(worker);
+    setSelectedAttendance(attendance);
+    setIsEmployeesModalOpen(true);
   };
 
-  // Close modal
-  const closeModal = () => {
-    setModalIsOpen(false);
-    setSelectedWorker(null); // Clear the selected worker
+  const openReportModal = (worker, attendance) => {
+    setSelectedWorker(worker);
+    setSelectedAttendance(attendance);
+    setIsReportModalOpen(true);
+  };
+
+  const closeEmployeesModal = () => {
+    setIsEmployeesModalOpen(false);
+    setSelectedWorker(null);
+    setSelectedAttendance(null);
+  };
+
+  const closeReportModal = () => {
+    setIsReportModalOpen(false);
+    setSelectedWorker(null);
     setSelectedAttendance(null);
   };
 
@@ -114,8 +131,8 @@ export const EmployeeStatus = () => {
       </Helmet>
       <WorkersSideBarPage>
         <div className="bg-white border rounded-lg px-8 py-6 mx-auto my-3 max-w-5xl shadow-lg">
-          <h2 className="text-xl font-bold mb-4 text-center">
-            Attendance Status
+          <h2 className="text-xl text-blue-600 font-bold mb-4 text-center">
+            Attendance Status - {format(new Date(), "MMMM dd, yyyy")}
           </h2>
           <div className="my-2 bg-blue-500 h-[1.1px]"></div>
 
@@ -126,10 +143,10 @@ export const EmployeeStatus = () => {
 
             <input
               type="text"
-              placeholder="Search by worker name"
+              placeholder="Search by worker's name or email address..."
               value={searchTerm}
               onChange={handleSearch}
-              className="m-4 w-full p-2 border border-gray-300 rounded-md"
+              className="mt-4 mr-4 mb-4 w-full p-2 border border-gray-300 rounded-md"
             />
 
             {/* Table Data for the Workers */}
@@ -139,9 +156,11 @@ export const EmployeeStatus = () => {
                   <tr>
                     <th className="p-2 text-left">No.</th>
                     <th className="p-2 text-left">Name</th>
+                    <th className="p-2 text-left">Email</th>
                     <th className="p-2 text-center">Gender</th>
                     <th className="p-2 text-center">Work-Type</th>
                     <th className="p-2 text-center">Status</th>
+                    <th className="p-2 text-center">Report</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -151,6 +170,7 @@ export const EmployeeStatus = () => {
                         {currentPage * workersPerPage + index + 1}
                       </td>
                       <td className="p-2">{worker.name}</td>
+                      <td className="p-2">{worker.email}</td>
                       <td className="p-2 text-center">
                         <span
                           className={
@@ -182,9 +202,17 @@ export const EmployeeStatus = () => {
                       <td className="p-2 text-center">
                         <button
                           className="bg-indigo-600 text-white w-full rounded-lg p-2"
-                          onClick={() => openModal(worker, attendance)}
+                          onClick={() => openEmployeesModal(worker, attendance)}
                         >
                           Salary Status
+                        </button>
+                      </td>
+                      <td className="p-2 text-center">
+                        <button
+                          className="bg-orange-600 text-white w-full rounded-lg p-2"
+                          onClick={() => openReportModal(worker, attendance)}
+                        >
+                          Report
                         </button>
                       </td>
                     </tr>
@@ -210,28 +238,57 @@ export const EmployeeStatus = () => {
               />
             </div>
 
-            {/* Modal for WorkersComponents */}
-            {selectedWorker && (
-              <Modal
-                isOpen={modalIsOpen}
-                onRequestClose={closeModal}
-                contentLabel="Worker Details"
-                className="modal-content"
-                overlayClassName="modal-overlay"
-              >
-                <div className="modal-header">
-                  <button onClick={closeModal} className="close-button">
-                    &times;
-                  </button>
-                </div>
-                <div className="modal-body">
+            {/* Modal for EmployeesComponent */}
+            <Modal
+              isOpen={isEmployeesModalOpen}
+              onRequestClose={closeEmployeesModal}
+              contentLabel="Worker Details"
+              className="modal-employee-content"
+              overlayClassName="modal-employee-overlay"
+            >
+              <div className="modal-header">
+                <button
+                  onClick={closeEmployeesModal}
+                  className="close-employee-button"
+                >
+                  &times;
+                </button>
+              </div>
+              <div className="modal-body">
+                {selectedWorker && (
                   <EmployeesComponents
                     worker={selectedWorker}
-                    attendance={attendance}
+                    attendance={selectedAttendance}
                   />
-                </div>
-              </Modal>
-            )}
+                )}
+              </div>
+            </Modal>
+
+            {/* Modal for EmployeeReport */}
+            <Modal
+              isOpen={isReportModalOpen}
+              onRequestClose={closeReportModal}
+              contentLabel="Worker Details"
+              className="modal-report-content"
+              overlayClassName="modal-report-overlay"
+            >
+              <div className="modal-header">
+                <button
+                  onClick={closeReportModal}
+                  className="close-report-button"
+                >
+                  &times;
+                </button>
+              </div>
+              <div className="modal-body">
+                {selectedWorker && (
+                  <EmployeeReport
+                    worker={selectedWorker}
+                    attendance={selectedAttendance}
+                  />
+                )}
+              </div>
+            </Modal>
           </div>
         </div>
       </WorkersSideBarPage>

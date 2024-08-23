@@ -34,6 +34,7 @@ import ListOfDepartments from "./components/WorkersPage/WorkersDepartmentPage/Li
 import AddAttendance from "./components/WorkersPage/WorkersAttendancePage/AddAttendance";
 import ListOfAttendance from "./components/WorkersPage/WorkersAttendancePage/ListOfAttendance";
 import { EmployeeStatus } from "./components/WorkersPage/WorkersEmployeePage/EmployeeStatus.jsx";
+import WorkersDashboard from "./components/WorkersPage/WorkersDashboard/WorkersDashboard.jsx";
 
 function App() {
   return (
@@ -125,9 +126,16 @@ function App() {
           />
 
           {/* -------------------------------- Workers Routes ---------------------------*/}
+
+          {/* Workers Page Dashboard */}
+          <Route
+            path="/workers/dashboard"
+            element={<ProtectedRoute element={WorkersDashboard} />}
+          />
+
           <Route
             path="/workers"
-            element={<ProtectedRoute element={WorkersSideBarPage} />}
+            element={<ProtectedRoute element={WorkersDashboard} />}
           />
 
           {/* Tasks Routes */}
@@ -164,6 +172,7 @@ function App() {
             path="/workers/employeestatus"
             element={<ProtectedRoute element={EmployeeStatus} />}
           />
+
           {/* Catch-all route for 404 Not Found */}
           <Route path="*" element={<NotFound />} />
         </Routes>

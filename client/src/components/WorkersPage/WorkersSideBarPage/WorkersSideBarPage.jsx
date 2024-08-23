@@ -50,6 +50,8 @@ const WorkersSideBarPage = ({ children }) => {
   // For the Account Profile
   const [isOpen, setIsOpen] = useState(false);
 
+ 
+
   return (
     <>
       <Helmet>
@@ -290,89 +292,17 @@ const WorkersSideBarPage = ({ children }) => {
                 to="/workers/employeestatus"
               >
                 <i className="fa-sharp fa-solid fa-person-digging mr-2 text-green-600"></i>
-                Employee Status
+                Employee Salary
               </Link>
             </div>
-
-            {/* Retailers Section */}
-            <div
-              className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-100"
-              onClick={toggleRetailersSubmenu}
+            <button
+              className="mt-5 px-6 py-2 text-md text-white bg-blue-500 rounded-lg hover:bg-blue-800"
+              onClick={() => {
+                window.location.href = "/business";
+              }}
             >
-              <i className="fas fa-store text-blue-600"></i>
-              <div className="flex justify-between w-full items-center">
-                <span className="text-[15px] ml-4 text-gray-700 font-medium">
-                  Retailers
-                </span>
-                <span
-                  className={`text-sm ${
-                    isRetailersSubmenuOpen ? "rotate-180" : "rotate-0"
-                  }`}
-                >
-                  <i className="fas fa-chevron-down"></i>
-                </span>
-              </div>
-            </div>
-            <div
-              className={`text-left text-sm mt-2 w-4/5 mx-auto text-gray-700 font-medium ${
-                isRetailersSubmenuOpen ? "" : "hidden"
-              }`}
-            >
-              <Link
-                className="cursor-pointer p-2 hover:bg-blue-100 rounded-md mt-1 block"
-                to="/workers/addretailer"
-              >
-                <i className="fas fa-user-plus mr-2 text-blue-600"></i>
-                Add Retailer
-              </Link>
-              <Link
-                className="cursor-pointer p-2 hover:bg-blue-100 rounded-md mt-1 block"
-                to="/workers/listofretailers"
-              >
-                <i className="fas fa-list-ul mr-2 text-blue-600"></i>
-                List Of Retailers
-              </Link>
-            </div>
-
-            {/* Invoice Section */}
-            <div
-              className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-100"
-              onClick={toggleInvoiceSubmenu}
-            >
-              <i className="fas fa-file-invoice text-blue-600"></i>
-              <div className="flex justify-between w-full items-center">
-                <span className="text-[15px] ml-4 text-gray-700 font-medium">
-                  Invoice
-                </span>
-                <span
-                  className={`text-sm ${
-                    isInvoiceSubmenuOpen ? "rotate-180" : "rotate-0"
-                  }`}
-                >
-                  <i className="fas fa-chevron-down"></i>
-                </span>
-              </div>
-            </div>
-            <div
-              className={`text-left text-sm mt-2 w-4/5 mx-auto text-gray-700 font-medium ${
-                isInvoiceSubmenuOpen ? "" : "hidden"
-              }`}
-            >
-              <Link
-                className="cursor-pointer p-2 hover:bg-blue-100 rounded-md mt-1 block"
-                to="/workers/addinvoice"
-              >
-                <i className="fas fa-plus-square mr-2 text-blue-600"></i>
-                Add Invoice
-              </Link>
-              <Link
-                className="cursor-pointer p-2 hover:bg-blue-100 rounded-md mt-1 block"
-                to="/workers/listofinvoices"
-              >
-                <i className="fas fa-list-ul mr-2 text-blue-600"></i>
-                List Of Invoices
-              </Link>
-            </div>
+              Business Section
+            </button>
           </div>
         </div>
         {/* Main Content Area */}

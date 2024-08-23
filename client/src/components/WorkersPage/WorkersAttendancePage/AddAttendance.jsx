@@ -88,15 +88,6 @@ const AddAttendance = () => {
     setBorrowedMoney((prev) => ({ ...prev, [workerId]: e.target.value }));
   };
 
-  // Handle the Paid Money Change
-  const [paymentMoney, setPaymentMoney] = useState(0);
-  const handlePaymentChange = (e, workerId) => {
-    if (e.target.value < 0) {
-      toast.error("Negative Amount cannot be enetered");
-      e.target.value = 0;
-    }
-    setPaymentMoney((prev) => ({ ...prev, [workerId]: e.target.value }));
-  };
   // Handle the Page Change
   const handlePageChange = ({ selected }) => {
     setCurrentPage(selected);
@@ -117,12 +108,23 @@ const AddAttendance = () => {
   const [leaveApproved, setLeaveApproved] = useState({});
   // Handle the Attendance Toggle Change
   const handleToggleChange = (workerId) => {
+    // Check if leave is not approved before allowing attendance toggle
     if (!leaveApproved[workerId]) {
-      // Allow attendance toggle only if leave is not approved
-      setAttendance((prev) => ({
-        ...prev,
-        [workerId]: !prev[workerId], // Toggle the boolean value
-      }));
+      // Update attendance and handle absence logic
+      setAttendance((prev) => {
+        // Toggle the attendance for the specific worker
+        const newAttendance = { ...prev, [workerId]: !prev[workerId] };
+
+        // If the worker is now marked as absent
+        if (!newAttendance[workerId]) {
+          // Clear role, quantity, lent money, and payment fields
+          setQuantities((prev) => ({ ...prev, [workerId]: 0 }));
+          setBorrowedMoney((prev) => ({ ...prev, [workerId]: 0 }));
+        }
+
+        // Return the updated attendance state
+        return newAttendance;
+      });
     }
   };
 
@@ -174,7 +176,6 @@ const AddAttendance = () => {
             : roles.find((r) => r.rolename === worker.selectedRole)?.wages || 0,
         total: calculateTotal(worker, worker._id),
         borrowedMoney: borrowedmoney[worker._id] || 0,
-        paymentMoney: paymentMoney[worker._id] || 0,
       }));
 
       console.log("Submitting attendance data:", { date, workersData });
@@ -252,7 +253,6 @@ const AddAttendance = () => {
                     <th className="p-2 text-left">Quantity</th>
                     <th className="p-2 text-left">Total (₹)</th>
                     <th className="p-2 text-center">Lent (₹)</th>
-                    <th className="p-2 text-center">Paid (₹)</th>
                     <th className="p-2 text-center">Leave Approved</th>
                   </tr>
                 </thead>
@@ -317,7 +317,11 @@ const AddAttendance = () => {
                               className={`w-full p-1 border rounded ${
                                 isAbsent ? "bg-gray-100 cursor-not-allowed" : ""
                               }`}
-                              value={worker.selectedRole || ""}
+                              value={
+                                !attendance[worker._id]
+                                  ? ""
+                                  : worker.selectedRole || ""
+                              }
                               onChange={(e) => handleRoles(e, start + index)}
                               disabled={isAbsent} // Disable if absent
                             >
@@ -372,21 +376,7 @@ const AddAttendance = () => {
                             disabled={isAbsent} // Disable if absent
                           />
                         </td>
-                        {/* Paid Money */}
-                        <td className="p-2">
-                          <input
-                            type="number"
-                            className={`w-full p-1 border rounded focus:outline-none focus:border-blue-500 ${
-                              isAbsent ? "bg-gray-100 cursor-not-allowed" : ""
-                            }`}
-                            placeholder="Paid Money"
-                            min="0"
-                            value={paymentMoney[worker._id] || ""}
-                            onChange={(e) => handlePaymentChange(e, worker._id)}
-                            disabled={isAbsent} // Disable if absent
-                          />
-                        </td>
-                        
+
                         {worker.worktype === "dailybased" ? (
                           <td className="p-2">
                             <label className="relative inline-flex cursor-pointer select-none items-center">

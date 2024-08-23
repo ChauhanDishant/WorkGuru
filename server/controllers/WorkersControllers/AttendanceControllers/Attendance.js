@@ -75,7 +75,6 @@ const addAttendance = async (req, res) => {
           wages: worker.wages || 0,
           total: worker.total || 0,
           borrowedMoney: worker.borrowedMoney || 0,
-          paymentMoney: worker.paymentMoney || 0,
           date: parsedDate,
           user: userId,
         };
