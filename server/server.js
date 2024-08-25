@@ -83,6 +83,11 @@ app.use(
   require("./routes/WorkersRoutes/AttendanceRoutes/AttendanceRoutes")
 );
 
+app.use(
+  "/workguru/workers",
+  require("./routes/WorkersRoutes/LoanRoutes/LoanRoutes")
+);
+
 // PORT
 const PORT = process.env.PORT || 5000;
 

@@ -7,7 +7,6 @@ import {
   eachDayOfInterval,
   isSunday,
   subMonths,
-  addMonths,
 } from "date-fns";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
@@ -31,7 +30,9 @@ const EmployeesComponents = ({ worker, attendance }) => {
   const [selectedMonth, setSelectedMonth] = useState(new Date());
 
   useEffect(() => {
-    calculateMonthStats(selectedMonth);
+    if (selectedMonth) {
+      calculateMonthStats(selectedMonth);
+    }
   }, [worker, attendance, selectedMonth]);
 
   // Helper function to get the last 12 months
@@ -41,7 +42,7 @@ const EmployeesComponents = ({ worker, attendance }) => {
     for (let i = 0; i < 12; i++) {
       months.push({
         label: format(date, "MMMM yyyy"),
-        date,
+        date: format(date, "yyyy-MM"), // Format date for option value
       });
       date = subMonths(date, 1);
     }
@@ -49,6 +50,11 @@ const EmployeesComponents = ({ worker, attendance }) => {
   };
 
   const calculateMonthStats = (month) => {
+    if (!(month instanceof Date) || isNaN(month.getTime())) {
+      console.error("Invalid date:", month);
+      return;
+    }
+
     const currentMonth = format(month, "MMMM yyyy");
     const firstDay = startOfMonth(month);
     const lastDay = endOfMonth(month);
@@ -67,7 +73,7 @@ const EmployeesComponents = ({ worker, attendance }) => {
         parseISO(record.date) <= lastDay
     ).length;
 
-    // calculate the total leaves approved for dailybased workers
+    // Calculate the total leaves approved for daily-based workers
     const totalLeavesApproved = attendance.filter(
       (record) =>
         record.worker === worker._id &&
@@ -91,7 +97,10 @@ const EmployeesComponents = ({ worker, attendance }) => {
     if (worker.worktype === "taskbased") {
       totalWorkDone = attendance.reduce(
         (sum, record) =>
-          record.worker === worker._id && record.isPresent
+          record.worker === worker._id &&
+          record.isPresent &&
+          parseISO(record.date) >= firstDay &&
+          parseISO(record.date) <= lastDay
             ? sum + (record.total || 0) // Assuming `total` represents task earnings
             : sum,
         0
@@ -101,7 +110,11 @@ const EmployeesComponents = ({ worker, attendance }) => {
     // Calculate the total amount borrowed by the worker during the month
     const totalBorrowed = attendance.reduce(
       (sum, record) =>
-        record.worker === worker._id ? sum + (record.borrowedMoney || 0) : sum,
+        record.worker === worker._id &&
+        parseISO(record.date) >= firstDay &&
+        parseISO(record.date) <= lastDay
+          ? sum + (record.borrowedMoney || 0)
+          : sum,
       0
     );
 
@@ -133,12 +146,12 @@ const EmployeesComponents = ({ worker, attendance }) => {
           Select Month:
         </label>
         <select
-          value={selectedMonth}
-          onChange={(e) => setSelectedMonth(new Date(e.target.value))}
+          value={format(selectedMonth, "yyyy-MM")}
+          onChange={(e) => setSelectedMonth(new Date(`${e.target.value}-01`))}
           className="px-4 py-2 bg-white border-2 border-indigo-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
         >
           {getLast12Months().map((month) => (
-            <option key={month.label} value={month.date}>
+            <option key={month.date} value={month.date}>
               {month.label}
             </option>
           ))}

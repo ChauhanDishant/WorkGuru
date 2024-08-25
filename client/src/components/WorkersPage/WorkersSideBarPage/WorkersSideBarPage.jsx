@@ -10,8 +10,7 @@ const WorkersSideBarPage = ({ children }) => {
   const [isAttendanceSubmenuOpen, setisAttendanceSubmenuOpen] = useState(false);
   const [isEmployeeStatusSubmenuOpen, setisEmployeeStatusSubmenuOpen] =
     useState(false);
-  const [isRetailersSubmenuOpen, setIsRetailersSubmenuOpen] = useState(false);
-  const [isInvoiceSubmenuOpen, setIsInvoiceSubmenuOpen] = useState(false);
+  const [isLoanSubmenuOpen, setIsLoanSubmenuOpen] = useState(false);
 
   const navigate = useNavigate();
   const handleLogOut = () => {
@@ -39,18 +38,12 @@ const WorkersSideBarPage = ({ children }) => {
     setisEmployeeStatusSubmenuOpen(!isEmployeeStatusSubmenuOpen);
   };
 
-  const toggleRetailersSubmenu = () => {
-    setIsRetailersSubmenuOpen(!isRetailersSubmenuOpen);
-  };
-
-  const toggleInvoiceSubmenu = () => {
-    setIsInvoiceSubmenuOpen(!isInvoiceSubmenuOpen);
+  const toggleLoanSubmenu = () => {
+    setIsLoanSubmenuOpen(!isLoanSubmenuOpen);
   };
 
   // For the Account Profile
   const [isOpen, setIsOpen] = useState(false);
-
- 
 
   return (
     <>
@@ -293,6 +286,46 @@ const WorkersSideBarPage = ({ children }) => {
               >
                 <i className="fa-sharp fa-solid fa-person-digging mr-2 text-green-600"></i>
                 Employee Salary
+              </Link>
+            </div>
+
+            {/* Loan Status Section*/}
+            <div
+              className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-100"
+              onClick={toggleLoanSubmenu}
+            >
+              <i className="fa-solid fa-landmark text-blue-600"></i>
+              <div className="flex justify-between w-full items-center">
+                <span className="text-[15px] ml-4 text-gray-700 font-medium">
+                  Loan Details
+                </span>
+                <span
+                  className={`text-sm ${
+                    isLoanSubmenuOpen ? "rotate-180" : "rotate-0"
+                  }`}
+                >
+                  <i className="fas fa-chevron-down"></i>
+                </span>
+              </div>
+            </div>
+            <div
+              className={`text-left text-sm mt-2 w-4/5 mx-auto text-gray-700 font-medium ${
+                isLoanSubmenuOpen ? "" : "hidden"
+              }`}
+            >
+              <Link
+                className="cursor-pointer p-2 hover:bg-blue-100 rounded-md mt-1 block"
+                to="/workers/employeeloan"
+              >
+                <i className="fa-solid fa-money-bill mr-2 text-blue-600"></i>
+                Loan Procedure
+              </Link>
+              <Link
+                className="cursor-pointer p-2 hover:bg-blue-100 rounded-md mt-1 block"
+                to="/workers/employeeloandetails"
+              >
+                <i className="fa-regular fa-rectangle-list mr-2 text-blue-600"></i>
+                Loan Details
               </Link>
             </div>
             <button

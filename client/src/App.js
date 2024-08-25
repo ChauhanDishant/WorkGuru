@@ -35,6 +35,8 @@ import AddAttendance from "./components/WorkersPage/WorkersAttendancePage/AddAtt
 import ListOfAttendance from "./components/WorkersPage/WorkersAttendancePage/ListOfAttendance";
 import { EmployeeStatus } from "./components/WorkersPage/WorkersEmployeePage/EmployeeStatus.jsx";
 import WorkersDashboard from "./components/WorkersPage/WorkersDashboard/WorkersDashboard.jsx";
+import EmployeeLoan from "./components/WorkersPage/WorkersEmployeeLoan/EmployeeLoan.jsx";
+import EmployeeLoanData from "./components/WorkersPage/WorkersEmployeeLoan/EmployeeLoanData.jsx";
 
 function App() {
   return (
@@ -171,6 +173,15 @@ function App() {
           <Route
             path="/workers/employeestatus"
             element={<ProtectedRoute element={EmployeeStatus} />}
+          />
+          {/* Employee Loan Routes */}
+          <Route
+            path="/workers/employeeloan"
+            element={<ProtectedRoute element={EmployeeLoan} />}
+          />
+          <Route
+            path="/workers/employeeloandetails"
+            element={<ProtectedRoute element={EmployeeLoanData} />}
           />
 
           {/* Catch-all route for 404 Not Found */}
