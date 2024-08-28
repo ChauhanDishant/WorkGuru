@@ -7,7 +7,10 @@ const path = require("path");
 
 const app = express();
 
-const allowedOrigins = ["http://localhost:3000", "https://workguru.vercel.app"];
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://workguru-client.onrender.com/",
+];
 
 const corsOptions = {
   origin: function (origin, callback) {
