@@ -3,11 +3,14 @@ import WorkersSideBarPage from "../WorkersSideBarPage/WorkersSideBarPage";
 import { Helmet } from "react-helmet";
 import axios from "axios";
 import toast from "react-hot-toast";
+import LoadingSpinner from "../../LoadingScreen/LoadingSpinner";
+import ErrorDisplay from "../../LoadingScreen/ErrorDisplay";
 
 const ListOfDepartments = () => {
   const [departments, setDepartments] = useState([]);
   const [workers, setWorkers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [currentPages, setCurrentPages] = useState({});
   const workersPerPage = 3;
 
@@ -36,8 +39,9 @@ const ListOfDepartments = () => {
           toast.error("Failed to fetch data");
         }
       } catch (err) {
-        toast.error(err.response?.data?.message || "An error occurred");
-        console.error(err);
+        console.error("Error fetching data:", err);
+        setError(err.message || "An error occurred while fetching data");
+        toast.error(err.message || "An error occurred while fetching data");
       } finally {
         setIsLoading(false);
       }
@@ -127,6 +131,14 @@ const ListOfDepartments = () => {
     );
   };
 
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  if (error) {
+    return <ErrorDisplay message={error} />;
+  }
+
   return (
     <>
       <Helmet>
@@ -138,80 +150,68 @@ const ListOfDepartments = () => {
             <h1 className="text-3xl font-bold text-gray-900 mb-6">
               Departments Overview
             </h1>
-            {isLoading ? (
-              <div className="text-center">
-                <div className="spinner"></div>
-                <p className="mt-2 text-gray-600">Loading departments...</p>
+            <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <i className="fas fa-building text-blue-500 text-2xl mr-2"></i>
+                  <span className="text-xl font-semibold text-gray-700">
+                    Total Departments: {departments.length}
+                  </span>
+                </div>
+                <div className="flex items-center">
+                  <i className="fas fa-users text-green-500 text-2xl mr-2"></i>
+                  <span className="text-xl font-semibold text-gray-700">
+                    Total Workers: {workers.length}
+                  </span>
+                </div>
               </div>
-            ) : (
-              <>
-                <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <i className="fas fa-building text-blue-500 text-2xl mr-2"></i>
-                      <span className="text-xl font-semibold text-gray-700">
-                        Total Departments: {departments.length}
-                      </span>
-                    </div>
-                    <div className="flex items-center">
-                      <i className="fas fa-users text-green-500 text-2xl mr-2"></i>
-                      <span className="text-xl font-semibold text-gray-700">
-                        Total Workers: {workers.length}
-                      </span>
-                    </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {departmentsWithWorkers.map((department) => (
+                <div
+                  key={department._id}
+                  className="bg-white rounded-lg shadow-md overflow-hidden"
+                >
+                  <div className="bg-blue-500 p-4 grid grid-cols-[90%_auto]">
+                    <h3 className="text-xl font-bold text-white">
+                      {department.departmentname}
+                    </h3>
+                    <button
+                      className="text-xl font-bold text-white"
+                      onClick={() => handleDeleteDepartment(department._id)}
+                    >
+                      <i className="fa-solid fa-delete-left"></i>
+                    </button>
+                  </div>
+                  <div className="p-4">
+                    <p className="text-gray-600 mb-4">
+                      <i className="fas fa-users mr-2"></i>
+                      Workers: {department.workers.length}
+                    </p>
+                    <ul className="space-y-2">
+                      {department.workers
+                        .slice(
+                          (currentPages[department._id] - 1) * workersPerPage,
+                          currentPages[department._id] * workersPerPage
+                        )
+                        .map((worker) => (
+                          <li
+                            key={worker._id}
+                            className="flex items-center text-gray-700"
+                          >
+                            <i className="fas fa-user-tie mr-2 text-blue-500"></i>
+                            <span className="font-medium">{worker.name}</span>
+                            <span className="ml-2 text-sm text-gray-500">
+                              ({worker.worktype})
+                            </span>
+                          </li>
+                        ))}
+                    </ul>
+                    {renderPagination(department)}
                   </div>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {departmentsWithWorkers.map((department) => (
-                    <div
-                      key={department._id}
-                      className="bg-white rounded-lg shadow-md overflow-hidden"
-                    >
-                      <div className="bg-blue-500 p-4 grid grid-cols-[90%_auto]">
-                        <h3 className="text-xl font-bold text-white">
-                          {department.departmentname}
-                        </h3>
-                        <button
-                          className="text-xl font-bold text-white"
-                          onClick={() => handleDeleteDepartment(department._id)}
-                        >
-                          <i className="fa-solid fa-delete-left"></i>
-                        </button>
-                      </div>
-                      <div className="p-4">
-                        <p className="text-gray-600 mb-4">
-                          <i className="fas fa-users mr-2"></i>
-                          Workers: {department.workers.length}
-                        </p>
-                        <ul className="space-y-2">
-                          {department.workers
-                            .slice(
-                              (currentPages[department._id] - 1) *
-                                workersPerPage,
-                              currentPages[department._id] * workersPerPage
-                            )
-                            .map((worker) => (
-                              <li
-                                key={worker._id}
-                                className="flex items-center text-gray-700"
-                              >
-                                <i className="fas fa-user-tie mr-2 text-blue-500"></i>
-                                <span className="font-medium">
-                                  {worker.name}
-                                </span>
-                                <span className="ml-2 text-sm text-gray-500">
-                                  ({worker.worktype})
-                                </span>
-                              </li>
-                            ))}
-                        </ul>
-                        {renderPagination(department)}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </>
-            )}
+              ))}
+            </div>
           </div>
         </div>
       </WorkersSideBarPage>

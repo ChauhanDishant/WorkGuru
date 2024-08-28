@@ -66,14 +66,11 @@ const EmployeeLoan = () => {
 
     try {
       const addLoan = {
-        workername: selectedWorker.name,
+        workerId: selectedWorker._id, // Use the worker's unique ID
         loanDate: loanDate,
         loanAmount: loanAmount,
         repaidAmount: repaidAmount || 0,
-        totalAmount: loanAmount,    
-        phonenumber: selectedWorker.phonenumber,
-        gender: selectedWorker.gender,
-        worktype: selectedWorker.worktype,
+        totalAmount: loanAmount,
       };
 
       const res = await axios.post("/workguru/workers/addloan", addLoan, {
@@ -86,10 +83,19 @@ const EmployeeLoan = () => {
         toast.success("Loan applied successfully");
         window.location.reload(); // Refresh to reflect changes
       } else {
-        throw new Error(res.data.message || "Failed to apply loan");
+        toast.error(res.data.message || "Failed to apply loan");
       }
-    } catch (error) {
-      toast.error(error.message || "Error applying loan");
+    } catch (err) {
+      if (err.response && err.response.data) {
+        // Display the error message from the backend
+        toast.error(
+          err.response.data.message ||
+            "An error occurred while adding the loan."
+        );
+      } else {
+        // Handle unexpected errors
+        toast.error("An error occurred while adding the loan.");
+      }
     }
   };
 

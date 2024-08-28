@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Helmet } from "react-helmet";
+import { useGoogleLogin } from "@react-oauth/google";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -80,6 +81,43 @@ const Login = () => {
       setOtp(newOtp);
     }
   };
+
+  const handleGoogleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      axios.defaults.baseURL = "http://localhost:5000/";
+      try {
+        const userInfo = await axios.get(
+          "https://www.googleapis.com/oauth2/v3/userinfo",
+          {
+            headers: {
+              Authorization: `Bearer ${tokenResponse.access_token}`,
+            },
+          }
+        );
+
+        const userEmail = userInfo.data.email;
+
+        const response = await axios.post("/workguru/login", {
+          email: userEmail,
+          isGoogleSignIn: true, // Flag to indicate Google login
+        });
+
+        if (response.data.success) {
+          localStorage.setItem("token", response.data.token);
+          toast.success("You have signed in successfully");
+          navigate("/options");
+        } else {
+          toast.error("User not registered. Please sign up first.");
+        }
+      } catch (googleLoginError) {
+        toast.error("Error during Google sign-in. Please try again.");
+      }
+    },
+    onError: (error) => {
+      console.error("Google Sign-In failed", error);
+      toast.error("Google Sign-In failed. Please try again.");
+    },
+  });
 
   return (
     <>
@@ -177,6 +215,26 @@ const Login = () => {
                       </button>
                     </>
                   )}
+                  <div className="text-center mt-3">
+                    <button
+                      className="tracking-wide font-semibold bg-red-500 text-gray-100 w-full py-4 rounded-lg hover:bg-red-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
+                      onClick={() => handleGoogleLogin()}
+                    >
+                      <svg
+                        className="w-6 h-6 -ml-2"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+                        <circle cx="8.5" cy={7} r={4} />
+                        <path d="M20 8v6M23 11h-6" />
+                      </svg>
+                      <span className="mx-2">Sign In with Google</span>
+                    </button>
+                  </div>
                   <p className="text-gray-500 text-lg">
                     Not Registered yet?
                     <span className="mx-1 text-blue-600 underline">

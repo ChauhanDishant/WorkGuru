@@ -6,16 +6,23 @@ import toast from "react-hot-toast";
 import BusinessSideBarPage from "../BusinessSideBarPage/BusinessSideBarPage";
 import InvoicePDF from "./InvoicePDF";
 import { useNavigate } from "react-router";
+import LoadingSpinner from "../../LoadingScreen/LoadingSpinner";
+import ErrorDisplay from "../../LoadingScreen/ErrorDisplay";
 
 const ListofInvoices = () => {
   const navigate = useNavigate();
 
   const [invoiceData, setInvoiceData] = useState([]);
+  const [user, setUser] = useState([]);
   const [filteredInvoiceData, setFilteredInvoiceData] = useState([]);
   const [sortOption, setSortOption] = useState("Recent");
 
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   useEffect(() => {
     axios.defaults.baseURL = "http://localhost:5000/";
+
     const fetchInvoices = async () => {
       try {
         const res = await axios.get("/workguru/business/listofinvoices", {
@@ -31,10 +38,38 @@ const ListofInvoices = () => {
           toast.error(res.data.message);
         }
       } catch (err) {
-        toast.error(err.message);
+        console.error("Error fetching data:", err);
+        setError(err.message || "An error occurred while fetching data");
+        toast.error(err.message || "An error occurred while fetching data");
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchInvoices();
+
+    const fetchUserData = async () => {
+      const token = localStorage.getItem("token");
+      try {
+        const response = await axios.get("/workguru/profile", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (response.data.success) {
+          console.log(response.data.data);
+          toast.success(response.data.message);
+          setUser(response.data.data);
+        }
+      } catch (err) {
+        console.error("Error fetching data:", err);
+        setError(err.message || "An error occurred while fetching data");
+        toast.error(err.message || "An error occurred while fetching data");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUserData();
   }, []);
 
   const formatDate = (dateString) => {
@@ -252,45 +287,12 @@ const ListofInvoices = () => {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  // Fetching the User's data;
-  // Fetching the Data of the User
-  const [user, setUser] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    axios.defaults.baseURL = "http://localhost:5000/";
-    const fetchUserData = async () => {
-      const token = localStorage.getItem("token");
-      try {
-        const response = await axios.get("/workguru/profile", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        if (response.data.success) {
-          console.log(response.data.data);
-          toast.success(response.data.message);
-          setUser(response.data.data);
-          setLoading(false);
-        }
-      } catch (error) {
-        toast.error(error.message);
-        console.error("Error fetching user data:", error);
-        setError("Failed to fetch user data");
-        setLoading(false);
-      }
-    };
-
-    fetchUserData();
-  }, []);
-
-  if (loading) {
-    return <div>Loading...</div>;
+  if (isLoading) {
+    return <LoadingSpinner />;
   }
 
   if (error) {
-    return <div>{error}</div>;
+    return <ErrorDisplay message={error} />;
   }
 
   return (

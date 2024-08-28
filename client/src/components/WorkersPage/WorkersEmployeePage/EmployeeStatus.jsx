@@ -19,8 +19,10 @@ export const EmployeeStatus = () => {
   const [filteredWorkers, setFilteredWorkers] = useState([]);
   const [totalworkers, setTotalWorkers] = useState(0);
   const [attendance, setAttendance] = useState([]);
+  const [loan, setLoan] = useState([]);
   const [selectedWorker, setSelectedWorker] = useState(null);
   const [selectedAttendance, setSelectedAttendance] = useState(null);
+  const [selectedLoan, setSelectedLoan] = useState(null);
   const [isEmployeesModalOpen, setIsEmployeesModalOpen] = useState(false);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
 
@@ -47,11 +49,23 @@ export const EmployeeStatus = () => {
           }
         );
 
-        if (WorkersResponse.data.success && attendanceResponse.data.success) {
+        const loanResponse = await axios.get("/workguru/workers/listofloans", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+
+        if (
+          WorkersResponse.data.success &&
+          attendanceResponse.data.success &&
+          loanResponse.data.success
+        ) {
           setWorkers(WorkersResponse.data.data);
           setAttendance(attendanceResponse.data.data);
+          setLoan(loanResponse.data.data);
           console.log(attendanceResponse.data.data);
-          setFilteredWorkers(WorkersResponse.data.data); // Initially set the filtered workers as all workers
+          setFilteredWorkers(WorkersResponse.data.data);
+          // Initially set the filtered workers as all workers
           setTotalWorkers(WorkersResponse.data.data.length);
           setTimeout(() => {
             toast.success("Data Fetched Successfully");
@@ -202,7 +216,9 @@ export const EmployeeStatus = () => {
                       <td className="p-2 text-center">
                         <button
                           className="bg-indigo-600 text-white w-full rounded-lg p-2"
-                          onClick={() => openEmployeesModal(worker, attendance)}
+                          onClick={() =>
+                            openEmployeesModal(worker, attendance, loan)
+                          }
                         >
                           Salary Status
                         </button>
@@ -259,6 +275,7 @@ export const EmployeeStatus = () => {
                   <EmployeesComponents
                     worker={selectedWorker}
                     attendance={selectedAttendance}
+                    loan={loan}
                   />
                 )}
               </div>

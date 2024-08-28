@@ -21,7 +21,6 @@ const formatCurrency = (amount) => {
 };
 
 const EmployeeLoanData = () => {
-  const [workers, setWorkers] = useState([]);
   const [loanData, setLoanData] = useState([]);
   const [filteredLoanData, setFilteredLoanData] = useState([]);
   const [selectedLoan, setSelectedLoan] = useState(null);
@@ -38,32 +37,23 @@ const EmployeeLoanData = () => {
       setIsLoading(true);
       setError(null);
       try {
-        const workersResponse = await axios.get(
-          "/workguru/business/listofworkers",
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-            baseURL: "http://localhost:5000",
-          }
-        );
-        const response = await axios.get("/workguru/workers/listofloans", {
+        const loansResponse = await axios.get("/workguru/workers/listofloans", {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
           baseURL: "http://localhost:5000",
         });
+        console.log("Loans Response:", loansResponse.data.data);
 
-        if (response.data.success && workersResponse.data.success) {
-          setWorkers(workersResponse.data.success);
-          setLoanData(response.data.data);
-          setFilteredLoanData(response.data.data); // Initialize filtered data
-          toast.success("Data fetched successfully");
-        } else {
-          throw new Error(response.data.message || "Failed to fetch data");
-        }
+        const loansData = Array.isArray(loansResponse.data.data)
+          ? loansResponse.data.data
+          : [];
+
+        setLoanData(loansData);
+        setFilteredLoanData(loansData);
+        toast.success("Data fetched successfully");
       } catch (err) {
-        console.error("Error fetching loan data:", err);
+        console.error("Error fetching data:", err);
         setError(err.message || "An error occurred while fetching data");
         toast.error(err.message || "An error occurred while fetching data");
       } finally {
@@ -75,9 +65,10 @@ const EmployeeLoanData = () => {
   }, []);
 
   useEffect(() => {
-    const filteredData = loanData.filter((loan) =>
-      loan.workername.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const filteredData = loanData.filter((loan) => {
+      const workerName = loan.worker?.name || "";
+      return workerName.toLowerCase().includes(searchQuery.toLowerCase());
+    });
     setFilteredLoanData(filteredData);
   }, [searchQuery, loanData]);
 
@@ -122,7 +113,6 @@ const EmployeeLoanData = () => {
           <p className="text-gray-600 text-center mb-6">As of {today}</p>
           <div className="my-4 bg-blue-500 h-[2px]"></div>
 
-          {/* Search Input */}
           <div className="mb-4 flex justify-center">
             <input
               type="text"
@@ -142,19 +132,19 @@ const EmployeeLoanData = () => {
                       Worker Name
                     </th>
                     <th className="border p-4 text-left text-blue-600">
-                      Phone-Number
+                      Phone Number
                     </th>
                     <th className="border p-4 text-left text-blue-600">
-                      WorkType
+                      Work Type
                     </th>
                     <th className="border p-4 text-left text-blue-600">
                       Loan Amount
                     </th>
                     <th className="border p-4 text-left text-blue-600">
-                      Repay Amount
+                      Repaid Amount
                     </th>
                     <th className="border p-4 text-left text-blue-600">
-                      Pending Amount
+                      Total Amount
                     </th>
                     <th className="border p-4 text-left text-blue-600">
                       Loan Date
@@ -167,9 +157,15 @@ const EmployeeLoanData = () => {
                 <tbody>
                   {paginatedLoanData.map((loan) => (
                     <tr key={loan._id} className="hover:bg-gray-50">
-                      <td className="border p-4">{loan.workername}</td>
-                      <td className="border p-4">{loan.phonenumber}</td>
-                      <td className="border p-4">{loan.worktype}</td>
+                      <td className="border p-4">
+                        {loan.worker?.name || "N/A"}
+                      </td>
+                      <td className="border p-4">
+                        {loan.worker?.phonenumber || "N/A"}
+                      </td>
+                      <td className="border p-4">
+                        {loan.worker?.worktype || "N/A"}
+                      </td>
                       <td className="border p-4">
                         {formatCurrency(loan.loanAmount)}
                       </td>
@@ -180,16 +176,14 @@ const EmployeeLoanData = () => {
                         {formatCurrency(loan.totalAmount)}
                       </td>
                       <td className="border p-4 text-center">
-                        {loan.loanDate
-                          ? format(new Date(loan.loanDate), "MMM d, yyyy")
-                          : "N/A"}
+                        {format(new Date(loan.loanDate), "MMM d, yyyy")}
                       </td>
                       <td className="border p-4 text-center">
                         <button
                           className="bg-indigo-600 text-white px-4 py-2 rounded-lg shadow hover:bg-indigo-700 transition duration-200"
                           onClick={() => openEmployeesLoanModal(loan)}
                         >
-                          View Details
+                          Details
                         </button>
                       </td>
                     </tr>
@@ -197,7 +191,6 @@ const EmployeeLoanData = () => {
                 </tbody>
               </table>
 
-              {/* Pagination */}
               <div className="mt-6 flex justify-center">
                 <ReactPaginate
                   previousLabel={"← Previous"}

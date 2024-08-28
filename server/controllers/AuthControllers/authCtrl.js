@@ -50,25 +50,30 @@ const signupController = async (req, res) => {
 // LoginController
 const loginController = async (req, res) => {
   try {
-    const existingUser = await userModel.findOne({ email: req.body.email });
+    const { email, password, isGoogleSignIn } = req.body;
+
+    // Check if the user exists in the database
+    const existingUser = await userModel.findOne({ email });
     if (!existingUser) {
       return res
         .status(201)
-        .send({ message: "User Does not Exist", success: false });
+        .send({ message: "User does not exist", success: false });
     }
 
-    const isMatch = await bcrypt.compare(
-      req.body.password,
-      existingUser.password
-    );
+    // If it's a normal email/password login
+    if (!isGoogleSignIn) {
+      const isMatch = await bcrypt.compare(password, existingUser.password);
 
-    if (!isMatch) {
-      return res.status(201).send({
-        message: "Invalid Email or Password",
-        success: false,
-      });
+      if (!isMatch) {
+        return res.status(201).send({
+          message: "Invalid email or password",
+          success: false,
+        });
+      }
     }
-    // generating a token for individual userID
+
+    // If it's a Google Sign-In, skip password verification
+    // Generate the JWT token for the user
     const generateToken = (userId) => {
       const payload = { id: userId };
       const token = jwt.sign(payload, process.env.JWT_SECRET, {
@@ -77,12 +82,10 @@ const loginController = async (req, res) => {
       return token;
     };
 
-    // Example usage after user login
-    const userId = existingUser._id;
-    const token = generateToken(userId);
+    const token = generateToken(existingUser._id);
 
     res.status(200).send({
-      message: "Just Verify the OTP sent to your email",
+      message: "Login successful. Just verify the OTP sent to your email",
       success: true,
       token,
     });
@@ -90,7 +93,7 @@ const loginController = async (req, res) => {
     console.log(err);
     return res
       .status(500)
-      .send({ message: "Error in Logging In", success: false });
+      .send({ message: "Error in logging in", success: false });
   }
 };
 

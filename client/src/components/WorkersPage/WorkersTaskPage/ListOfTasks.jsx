@@ -3,6 +3,8 @@ import WorkersSideBarPage from "../WorkersSideBarPage/WorkersSideBarPage";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { Helmet } from "react-helmet";
+import LoadingSpinner from "../../LoadingScreen/LoadingSpinner";
+import ErrorDisplay from "../../LoadingScreen/ErrorDisplay";
 
 const ListOfTasks = () => {
   const [roles, setRoles] = useState([]);
@@ -11,6 +13,9 @@ const ListOfTasks = () => {
   const [editRole, setEditRole] = useState(null);
   const [edittaskname, setEditTaskName] = useState();
   const [editwages, setEditWages] = useState();
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   // Pagination and Search
   const [currentPage, setCurrentPage] = useState(1);
@@ -30,9 +35,12 @@ const ListOfTasks = () => {
           setRoles(res.data.data);
           toast.success("Tasks fetched Successfully");
         }
-      } catch (error) {
-        toast.error("Error fetching tasks");
-        console.error("Error fetching tasks:", error);
+      } catch (err) {
+        console.error("Error fetching data:", err);
+        setError(err.message || "An error occurred while fetching data");
+        toast.error(err.message || "An error occurred while fetching data");
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -67,11 +75,22 @@ const ListOfTasks = () => {
         toast.success(res.data.message);
         setRoles(roles.filter((role) => role._id !== roleId));
       }
-    } catch (error) {
-      toast.error("Error deleting task");
-      console.error("Error deleting task:", error);
+    }catch (err) {
+      console.error("Error fetching data:", err);
+      setError(err.message || "An error occurred while fetching data");
+      toast.error(err.message || "An error occurred while fetching data");
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  if (error) {
+    return <ErrorDisplay message={error} />;
+  }
 
   const handleEdit = (role) => {
     setEditRole(role);

@@ -1,41 +1,37 @@
 const mongoose = require("mongoose");
 
 const LoanSchema = new mongoose.Schema({
-  workername: {
-    type: String,
-    required: [true, "Worker Name is required"],
+  worker: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Workers", // Assuming you have a Worker model
+    required: [true, "Worker reference is required"],
   },
   loanDate: {
-    type: String,
-    required: [true, "Worker Date is required"],
+    type: Date,
+    required: [true, "Loan Date is required"],
   },
   loanAmount: {
     type: Number,
-    required: [true, "Worker Amount is required"],
+    required: [true, "Loan Amount is required"],
   },
   repaidAmount: {
     type: Number,
-    defaultValue: 0,
+    default: 0,
     required: [true, "Repaid Amount is required"],
   },
   totalAmount: {
     type: Number,
     required: [true, "Total Amount is required"],
   },
-  phonenumber: {
-    type: String,
-    required: [true, "Phone Number is required"],
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Users", // Reference to the user who added the loan
+    required: true,
   },
-  gender: {
-    type: String,
-    required: [true, "Gender is required"],
-  },
-  worktype: {
-    type: String,
-    required: [true, "Work Type is required"],
-  },
-  user: { type: mongoose.Schema.Types.ObjectId, ref: "Users", required: true },
 });
+
+// Create a unique index on worker and loanDate
+LoanSchema.index({ worker: 1, loanDate: 1 }, { unique: true });
 
 const loanModel = mongoose.model("Loan", LoanSchema);
 

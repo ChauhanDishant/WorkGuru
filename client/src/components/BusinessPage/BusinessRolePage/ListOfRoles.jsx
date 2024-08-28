@@ -3,6 +3,8 @@ import BusinessSideBarPage from "../BusinessSideBarPage/BusinessSideBarPage";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { Helmet } from "react-helmet";
+import LoadingSpinner from "../../LoadingScreen/LoadingSpinner";
+import ErrorDisplay from "../../LoadingScreen/ErrorDisplay";
 
 const ListOfRoles = () => {
   const [roles, setRoles] = useState([]);
@@ -17,6 +19,10 @@ const ListOfRoles = () => {
   const [rolesPerPage] = useState(5);
   const [searchTerm, setSearchTerm] = useState("");
 
+  // Loading Screen
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   useEffect(() => {
     const fetchRoles = async () => {
       axios.defaults.baseURL = "http://localhost:5000/";
@@ -30,14 +36,25 @@ const ListOfRoles = () => {
           setRoles(res.data.data);
           toast.success(res.data.message);
         }
-      } catch (error) {
-        toast.error("Error fetching roles");
-        console.error("Error fetching roles:", error);
+      } catch (err) {
+        console.error("Error fetching data:", err);
+        setError(err.message || "An error occurred while fetching data");
+        toast.error(err.message || "An error occurred while fetching data");
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchRoles();
   }, []);
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  if (error) {
+    return <ErrorDisplay message={error} />;
+  }
 
   const toggleCheckbox = (event, role) => {
     const { checked } = event.target;
@@ -318,4 +335,3 @@ const ListOfRoles = () => {
 };
 
 export default ListOfRoles;
-  

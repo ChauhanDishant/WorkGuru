@@ -3,6 +3,8 @@ import BusinessSideBarPage from "../BusinessSideBarPage/BusinessSideBarPage";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { Helmet } from "react-helmet";
+import LoadingSpinner from "../../LoadingScreen/LoadingSpinner";
+import ErrorDisplay from "../../LoadingScreen/ErrorDisplay";
 
 const ListOfRetailers = () => {
   const [retailersData, setRetailersData] = useState([]);
@@ -17,6 +19,9 @@ const ListOfRetailers = () => {
   const [editContactNumber, setEditContactNumber] = useState("");
   const [editContactEmail, setEditContactEmail] = useState("");
   const [editContactAddress, setEditContactAddress] = useState("");
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchRetailers = async () => {
@@ -33,13 +38,24 @@ const ListOfRetailers = () => {
           toast.success(res.data.message);
         }
       } catch (err) {
-        toast.error(err.message);
-        console.log(err);
+        console.error("Error fetching data:", err);
+        setError(err.message || "An error occurred while fetching data");
+        toast.error(err.message || "An error occurred while fetching data");
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchRetailers();
   }, []);
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  if (error) {
+    return <ErrorDisplay message={error} />;
+  }
 
   const handleEditChange = (retailer) => {
     setEditRetailer(retailer);
@@ -142,8 +158,8 @@ const ListOfRetailers = () => {
   return (
     <BusinessSideBarPage>
       <Helmet>
-          <title>Retailers Section</title>
-        </Helmet>
+        <title>Retailers Section</title>
+      </Helmet>
       {editRetailer ? (
         <div className="bg-white border rounded-lg px-8 py-6 mx-auto my-3 max-w-3xl shadow-lg">
           <h2 className="text-xl font-bold mb-4 text-center">Edit Retailer</h2>

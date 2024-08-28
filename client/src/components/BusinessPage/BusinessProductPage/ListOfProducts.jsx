@@ -4,6 +4,8 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router";
+import LoadingSpinner from "../../LoadingScreen/LoadingSpinner";
+import ErrorDisplay from "../../LoadingScreen/ErrorDisplay";
 
 const ListOfProduct = () => {
   const navigate = useNavigate();
@@ -13,6 +15,9 @@ const ListOfProduct = () => {
   const [searchTerm, setSearchTerm] = useState(""); // Empty string for search
   const [currentPage, setCurrentPage] = useState(1); // Track current page
   const productsPerPage = 5; // Number of products per page
+
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -32,13 +37,24 @@ const ListOfProduct = () => {
           console.log(res.data.message);
         }
       } catch (err) {
-        toast.error(err.message);
-        console.log(err);
+        console.error("Error fetching data:", err);
+        setError(err.message || "An error occurred while fetching data");
+        toast.error(err.message || "An error occurred while fetching data");
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchProducts();
   }, []);
 
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  if (error) {
+    return <ErrorDisplay message={error} />;
+  }
+  
   // ------------------ Edit Function Starts -------------------------
   const handleEdit = (productId) => {
     navigate(`/business/editproducts/${productId}`);

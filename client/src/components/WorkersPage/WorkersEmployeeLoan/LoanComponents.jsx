@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { format } from "date-fns";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { format } from "date-fns";
 
 const LoanComponents = ({ loan }) => {
   const [repayAmount, setRepayAmount] = useState("");
@@ -21,24 +21,31 @@ const LoanComponents = ({ loan }) => {
 
   const handleRepay = async () => {
     try {
+      const repaymentAmount = parseFloat(repayAmount);
+
+      if (isNaN(repaymentAmount) || repaymentAmount <= 0) {
+        toast.error("Please enter a valid repayment amount.");
+        return;
+      }
+
       const remainingAmount = loanData.loanAmount - loanData.repaidAmount;
 
-      if (parseFloat(repayAmount) > remainingAmount) {
+      if (repaymentAmount > remainingAmount) {
         toast.error(
           `Repay amount cannot exceed ${formatCurrency(remainingAmount)}.`
         );
         return;
       }
 
-      const updatedRepaidAmount =
-        loanData.repaidAmount + parseFloat(repayAmount);
+      // Construct the payload for repayment
+      const payload = {
+        repaidAmount: repaymentAmount, // Amount to be added to repaidAmount
+      };
 
+      // Send the request to the backend
       const response = await axios.put(
-        `http://localhost:5000/workguru/workers/editloan/${loanData._id}`, // Adjust URL as needed
-        {
-          repaidAmount: updatedRepaidAmount,
-          totalAmount: loanData.loanAmount - updatedRepaidAmount, // Update the total amount
-        },
+        `http://localhost:5000/workguru/workers/editloan/${loanData._id}`,
+        payload,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -46,37 +53,47 @@ const LoanComponents = ({ loan }) => {
         }
       );
 
+      // Check if the request was successful
       if (response.data.success) {
         toast.success(response.data.message);
-        // Update local state with new data
+
+        // Update local state with the new loan data
         setLoanData((prevState) => ({
           ...prevState,
-          repaidAmount: updatedRepaidAmount,
-          totalAmount: loanData.loanAmount - updatedRepaidAmount,
+          repaidAmount: prevState.repaidAmount + repaymentAmount,
+          totalAmount:
+            prevState.loanAmount - (prevState.repaidAmount + repaymentAmount),
         }));
-        setRepayAmount(""); // Reset the repay amount
+
+        // Reset the repay amount field
+        setRepayAmount("");
       } else {
         toast.error(response.data.message);
       }
     } catch (err) {
-      console.log(err.message);
-      toast.error(err.message);
+      console.error(err.message);
+
+      if (err.response && err.response.data && err.response.data.message) {
+        toast.error(`Error: ${err.response.data.message}`);
+      } else {
+        toast.error("An error occurred while processing the repayment.");
+      }
     }
   };
 
   return (
     <div className="p-6 bg-white rounded-lg shadow-md">
       <h2 className="text-2xl font-bold mb-4">
-        Loan Report for {loanData.workername || "N/A"}
+        Loan Report for {loanData.worker.name || "N/A"}
       </h2>
       <p>
-        <strong>Phone Number:</strong> {loanData.phonenumber}
+        <strong>Phone Number:</strong> {loanData.worker.phonenumber}
       </p>
       <p>
-        <strong>Gender:</strong> {loanData.gender}
+        <strong>Gender:</strong> {loanData.worker.gender || "Not Known"}
       </p>
       <p>
-        <strong>Work Type:</strong> {loanData.worktype}
+        <strong>Work Type:</strong> {loanData.worker.worktype}
       </p>
 
       <div className="mt-6">

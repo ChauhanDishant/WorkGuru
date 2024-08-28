@@ -7,6 +7,8 @@ import axios from "axios";
 import ReactPaginate from "react-paginate";
 import WorkersComponents from "./WorkersComponents";
 import "./modal.css";
+import LoadingSpinner from "../../LoadingScreen/LoadingSpinner";
+import ErrorDisplay from "../../LoadingScreen/ErrorDisplay";
 
 // Modal settings for accessibility
 Modal.setAppElement("#root");
@@ -18,6 +20,9 @@ const ListOfAttendance = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedWorker, setSelectedWorker] = useState(null);
   const [attendance, setAttendance] = useState([]);
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   // Fetching the Data of Workers
   useEffect(() => {
@@ -57,8 +62,11 @@ const ListOfAttendance = () => {
           });
         }
       } catch (err) {
-        console.log(err);
-        toast.error(err.message);
+        console.error("Error fetching data:", err);
+        setError(err.message || "An error occurred while fetching data");
+        toast.error(err.message || "An error occurred while fetching data");
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -107,6 +115,13 @@ const ListOfAttendance = () => {
     setSelectedAttendance(null);
   };
 
+    if (isLoading) {
+      return <LoadingSpinner />;
+    }
+
+    if (error) {
+      return <ErrorDisplay message={error} />;
+    }
   return (
     <>
       <Helmet>

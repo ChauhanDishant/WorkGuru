@@ -18,12 +18,13 @@ import {
   FaUserTie,
 } from "react-icons/fa";
 
-const EmployeesComponents = ({ worker, attendance }) => {
+const EmployeesComponents = ({ worker, attendance, loan }) => {
   const [monthStats, setMonthStats] = useState({
     currentMonth: "",
     presentDays: 0,
     absentDays: 0,
     totalWorkDone: 0,
+    loanAmount: 0,
     totalBorrowed: 0,
     totalSalary: 0,
   });
@@ -33,7 +34,7 @@ const EmployeesComponents = ({ worker, attendance }) => {
     if (selectedMonth) {
       calculateMonthStats(selectedMonth);
     }
-  }, [worker, attendance, selectedMonth]);
+  }, [worker, attendance, loan, selectedMonth]);
 
   // Helper function to get the last 12 months
   const getLast12Months = () => {
@@ -118,6 +119,17 @@ const EmployeesComponents = ({ worker, attendance }) => {
       0
     );
 
+    // **Calculate the total loan amount for the selected month**
+    const totalLoanAmount = loan.reduce(
+      (sum, record) =>
+        record.worker === worker._id &&
+        parseISO(record.loanDate) >= firstDay &&
+        parseISO(record.loanDate) <= lastDay
+          ? sum + (record.loanAmount || 0)
+          : sum,
+      0
+    );
+
     // Calculate the final total salary by subtracting the borrowed amount from the total work done
     const totalSalary = totalWorkDone - totalBorrowed;
 
@@ -129,6 +141,7 @@ const EmployeesComponents = ({ worker, attendance }) => {
       totalWorkDone,
       totalBorrowed,
       totalLeavesApproved,
+      loanAmount: totalLoanAmount, // Set the loan amount for the month
       totalSalary,
     });
   };
@@ -196,6 +209,11 @@ const EmployeesComponents = ({ worker, attendance }) => {
             <span className="text-green-600">
               {monthStats.totalWorkDone} /-
             </span>
+          </p>
+          <p className="mb-2 flex items-center">
+            <strong className="text-gray-700 mr-2">Loan Amount: </strong>
+            <FaRupeeSign className="text-indigo-600" />
+            <span className="text-indigo-600">{monthStats.loanAmount} /-</span>
           </p>
           <p className="mb-2 flex items-center">
             <strong className="text-gray-700 mr-2">Amount Borrowed:</strong>

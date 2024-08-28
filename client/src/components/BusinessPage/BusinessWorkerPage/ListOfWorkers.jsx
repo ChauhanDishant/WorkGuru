@@ -3,6 +3,8 @@ import BusinessSideBarPage from "../BusinessSideBarPage/BusinessSideBarPage";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { Helmet } from "react-helmet";
+import LoadingSpinner from "../../LoadingScreen/LoadingSpinner";
+import ErrorDisplay from "../../LoadingScreen/ErrorDisplay";
 
 const ListOfWorkers = () => {
   // used for fetching the data
@@ -24,6 +26,9 @@ const ListOfWorkers = () => {
   const [editworktype, setEditWorkType] = useState("");
   const [editdailywages, setEditDailyWages] = useState("");
 
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   useEffect(() => {
     const fetchWorkers = async () => {
       try {
@@ -41,13 +46,24 @@ const ListOfWorkers = () => {
           toast.success(res.data.message);
         }
       } catch (err) {
-        toast.error(err.message);
-        console.log(err);
+        console.error("Error fetching data:", err);
+        setError(err.message || "An error occurred while fetching data");
+        toast.error(err.message || "An error occurred while fetching data");
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchWorkers();
   }, []);
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  if (error) {
+    return <ErrorDisplay message={error} />;
+  }
 
   // --------------------------- Edit Function Starts ------------------------
 

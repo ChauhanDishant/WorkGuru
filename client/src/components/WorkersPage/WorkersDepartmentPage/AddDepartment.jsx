@@ -3,12 +3,17 @@ import WorkersSideBarPage from "../WorkersSideBarPage/WorkersSideBarPage";
 import { Helmet } from "react-helmet";
 import axios from "axios";
 import toast from "react-hot-toast";
+import LoadingSpinner from "../../LoadingScreen/LoadingSpinner";
+import ErrorDisplay from "../../LoadingScreen/ErrorDisplay";
 
 const AddDepartment = () => {
   const [workers, setWorkers] = useState([]);
   const [totalWorkers, setTotalWorkers] = useState(0);
   const [selectedWorkerCount, setSelectedWorkerCount] = useState(1);
   const [selectedWorkers, setSelectedWorkers] = useState([]);
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchWorkers = async () => {
@@ -97,8 +102,16 @@ const AddDepartment = () => {
         toast.error(res.data.message);
       }
     } catch (err) {
-      console.log(err);
-      toast.error(err.response.data.message);
+      if (err.response && err.response.data) {
+        // Display the error message from the backend
+        toast.error(
+          err.response.data.message ||
+            "An error occurred while adding the Department."
+        );
+      } else {
+        // Handle unexpected errors
+        toast.error("An error occurred while adding the loan.");
+      }
     }
   };
 

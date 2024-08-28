@@ -3,6 +3,8 @@ import BusinessSideBarPage from "../BusinessSideBarPage/BusinessSideBarPage";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { Helmet } from "react-helmet";
+import LoadingSpinner from "../../LoadingScreen/LoadingSpinner";
+import ErrorDisplay from "../../LoadingScreen/ErrorDisplay";
 
 const ListOfStocks = () => {
   const [stocks, setStocks] = useState([]);
@@ -19,6 +21,10 @@ const ListOfStocks = () => {
   const [itemsPerPage] = useState(5);
   const [searchTerm, setSearchTerm] = useState("");
 
+  // Loading Screen
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   useEffect(() => {
     const fetchStocks = async () => {
       axios.defaults.baseURL = "http://localhost:5000/";
@@ -34,14 +40,25 @@ const ListOfStocks = () => {
         } else {
           toast.error(res.data.message);
         }
-      } catch (error) {
-        toast.error("Error fetching stocks");
-        console.error("Error fetching stocks:", error);
+      } catch (err) {
+        console.error("Error fetching data:", err);
+        setError(err.message || "An error occurred while fetching data");
+        toast.error(err.message || "An error occurred while fetching data");
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchStocks();
   }, []);
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  if (error) {
+    return <ErrorDisplay message={error} />;
+  }
 
   const toggleCheckbox = (event, stock) => {
     const { checked } = event.target;
