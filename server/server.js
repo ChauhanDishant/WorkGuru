@@ -6,13 +6,23 @@ const cors = require("cors");
 const path = require("path");
 
 const app = express();
-app.use(
-  cors({
-    credentials: true,
-    origin: "http://localhost:3000",
-    optionSuccessStatus: 200,
-  })
-);
+
+const allowedOrigins = ["http://localhost:3000", "https://workguru.vercel.app"];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+  optionsSuccessStatus: 200,
+};
 
 // Serve static files from 'uploads' directory
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
