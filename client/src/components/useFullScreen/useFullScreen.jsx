@@ -39,4 +39,3 @@ const useFullscreen = () => {
 };
 
 export default useFullscreen;
-    
