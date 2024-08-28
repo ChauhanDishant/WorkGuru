@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorkGuru - Documentation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fff;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        pre.code-block {
+            background: #f4f4f4;
+            border-left: 3px solid #007bff;
+            padding: 10px;
+            overflow-x: auto;
+        }
+        ul {
+            list-style-type: disc;
+            margin: 10px 0;
+            padding: 0 20px;
+        }
+        li {
+            margin: 5px 0;
+        }
+        .section {
+            margin-bottom: 20px;
+            padding: 20px;
+            background: #e9ecef;
+            border-radius: 8px;
+        }
+        .section h2 {
+            margin-top: 0;
+        }
+        .section .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 10px;
+            background: #007bff;
+            color: #fff;
+            text-align: center;
+            border-radius: 4px;
+            text-decoration: none;
+        }
+        .section .button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>WorkGuru</h1>
+        <h2>Overview</h2>
+        <p>
+            WorkGuru is a MERN (MongoDB, Express, React, Node.js) stack project that provides a home service booking platform. Users can book services such as carpenters, plumbers, painters, movers, and packers. The project includes features for user authentication, OTP verification, and Google sign-in, along with a user-friendly interface and a comprehensive management system.
+        </p>
+        <h2>Table of Contents</h2>
+        <ul>
+            <li><a href="#prerequisites">Prerequisites</a></li>
+            <li><a href="#setup-instructions">Setup Instructions</a></li>
+            <li><a href="#running-locally">Running Locally</a></li>
+            <li><a href="#deployment">Deployment</a></li>
+            <li><a href="#environment-variables">Environment Variables</a></li>
+            <li><a href="#testing">Testing</a></li>
+            <li><a href="#contributing">Contributing</a></li>
+            <li><a href="#license">License</a></li>
+        </ul>
+        <h2 id="prerequisites">Prerequisites</h2>
+        <p>Before you start, ensure you have the following installed:</p>
+        <ul>
+            <li><a href="https://nodejs.org/">Node.js</a> (v14 or later)</li>
+            <li><a href="https://www.mongodb.com/">MongoDB</a> (for local development) or access to a MongoDB Atlas cluster</li>
+            <li><a href="https://www.npmjs.com/">npm</a> (Node Package Manager) or <a href="https://yarnpkg.com/">yarn</a> (optional)</li>
+        </ul>
+        <h2 id="setup-instructions">Setup Instructions</h2>
+        <h3>Clone the Repository</h3>
+        <pre class="code-block">
+            git clone https://github.com/yourusername/WorkGuru.git
+            cd WorkGuru
+        </pre>
+        <h3>Install Dependencies</h3>
+        <p>Install both server and client dependencies:</p>
+        <pre class="code-block">
+            # Server
+            cd server
+            npm install
+            # Client
+            cd ../client
+            npm install
+        </pre>
+        <h2 id="running-locally">Running Locally</h2>
+        <h3>Server</h3>
+        <pre class="code-block">
+            cd server
+            npm start
+        </pre>
+        <p>The server will run on <a href="http://localhost:5000">http://localhost:5000</a>.</p>
+        <h3>Client</h3>
+        <pre class="code-block">
+            cd ../client
+            npm start
+        </pre>
+        <p>The client will run on <a href="http://localhost:3000">http://localhost:3000</a>.</p>
+        <h2 id="deployment">Deployment</h2>
+        <h3>Production Deployment</h3>
+        <ol>
+            <li><strong>Build the Client:</strong></li>
+            <pre class="code-block">
+                cd client
+                npm run build
+            </pre>
+            <p>This will create a <code>build</code> directory with the production-ready files.</p>
+            <li><strong>Deploy the Server:</strong></li>
+            <ul>
+                <li>Push your server code to your Git repository.</li>
+                <li>Set up your hosting provider (e.g., Render) with the proper build and start commands.</li>
+                <li>Make sure to set the environment variables and database configurations.</li>
+            </ul>
+            <li><strong>Deploy the Client:</strong></li>
+            <ul>
+                <li>You can serve the React build files from your server or deploy them separately to a service like Vercel or Netlify.</li>
+                <li>If deploying with Render, you can configure it to serve the <code>build</code> directory directly.</li>
+            </ul>
+        </ol>
+        <h2 id="environment-variables">Environment Variables</h2>
+        <p>Create a <code>.env</code> file in the server directory and add the following environment variables:</p>
+        <pre class="code-block">
+            MONGODB_URI=mongodb://localhost:27017/workguru
+            JWT_SECRET=your_jwt_secret
+            EMAILJS_USER_ID=your_emailjs_user_id
+            EMAILJS_TEMPLATE_ID=your_emailjs_template_id
+            EMAILJS_SERVICE_ID=your_emailjs_service_id
+        </pre>
+        <p>Ensure that you also set the corresponding environment variables in your deployment service.</p>
+        <h2 id="testing">Testing</h2>
+        <p>Run tests for both the server and client:</p>
+        <pre class="code-block">
+            # Server
+            cd server
+            npm test
+            # Client
+            cd ../client
+            npm test
+        </pre>
+        <h2 id="contributing">Contributing</h2>
+        <ol>
+            <li>Fork the repository.</li>
+            <li>Create a feature branch (<code>git checkout -b feature/YourFeature</code>).</li>
+            <li>Commit your changes (<code>git commit -am 'Add new feature'</code>).</li>
+            <li>Push to the branch (<code>git push origin feature/YourFeature</code>).</li>
+            <li>Create a new Pull Request.</li>
+        </ol>
+        <h2 id="license">License</h2>
+        <p>This project is licensed under the MIT License - see the <a href="LICENSE">LICENSE</a> file for details.</p>
+
+        <div class="section">
+            <h2>Business Management</h2>
+            <div style="background-image: url('/BusinessSolution.jpeg'); background-size: cover; background-position: center; height: 320px; display: flex; align-items: center; justify-content: center; color: white; padding: 20px; border-radius: 8px; background-color: rgba(0,0,0,0.3);">
+                <div>
+                    <h3>Business Management</h3>
+                    <ul>
+                        <li>Streamlined Operations</li>
+                        <li>Efficient Stock Management</li>
+                        <li>Retailers Data Handling</li>
+                        <li>User-Friendly Interface</li>
+                    </ul>
+                    <a href="#" class="button">Enter Here</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Workers Management</h2>
+            <div style="background-image: url('/WorkersSolution.jpeg'); background-size: cover; background-position: center; height: 320px; display: flex; align-items: center; justify-content: center; color: white; padding: 20px; border-radius: 8px; background-color: rgba(0,0,0,0.3);">
+                <div>
+                    <h3>Workers Management</h3>
+                    <ul>
+                        <li>Worker Management</li>
+                        <li>Workers Attendance System</li>
+                        <li>Types of Workers</li>
+                        <li>Wages & Salary Details</li>
+                    </ul>
+                    <a href="#" class="button">Enter Here</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
