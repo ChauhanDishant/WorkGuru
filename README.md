@@ -1,72 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WorkGuru - Documentation</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            color: #333;
-            line-height: 1.6;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            background: #fff;
-        }
-        h1, h2, h3 {
-            color: #333;
-        }
-        a {
-            color: #007bff;
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-        pre.code-block {
-            background: #f4f4f4;
-            border-left: 3px solid #007bff;
-            padding: 10px;
-            overflow-x: auto;
-        }
-        ul {
-            list-style-type: disc;
-            margin: 10px 0;
-            padding: 0 20px;
-        }
-        li {
-            margin: 5px 0;
-        }
-        .section {
-            margin-bottom: 20px;
-            padding: 20px;
-            background: #e9ecef;
-            border-radius: 8px;
-        }
-        .section h2 {
-            margin-top: 0;
-        }
-        .section .button {
-            display: inline-block;
-            padding: 10px 20px;
-            margin-top: 10px;
-            background: #007bff;
-            color: #fff;
-            text-align: center;
-            border-radius: 4px;
-            text-decoration: none;
-        }
-        .section .button:hover {
-            background: #0056b3;
-        }
-    </style>
-</head>
 <body>
     <div class="container">
         <h1>WorkGuru</h1>
@@ -172,7 +103,6 @@
         </ol>
         <h2 id="license">License</h2>
         <p>This project is licensed under the MIT License - see the <a href="LICENSE">LICENSE</a> file for details.</p>
-
         <div class="section">
             <h2>Business Management</h2>
             <div style="background-image: url('/BusinessSolution.jpeg'); background-size: cover; background-position: center; height: 320px; display: flex; align-items: center; justify-content: center; color: white; padding: 20px; border-radius: 8px; background-color: rgba(0,0,0,0.3);">
@@ -188,7 +118,6 @@
                 </div>
             </div>
         </div>
-
         <div class="section">
             <h2>Workers Management</h2>
             <div style="background-image: url('/WorkersSolution.jpeg'); background-size: cover; background-position: center; height: 320px; display: flex; align-items: center; justify-content: center; color: white; padding: 20px; border-radius: 8px; background-color: rgba(0,0,0,0.3);">
