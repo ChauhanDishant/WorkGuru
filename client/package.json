@@ -13,6 +13,7 @@
     "autoprefixer": "^10.4.19",
     "axios": "^1.7.2",
     "chart.js": "^4.4.3",
+    "core-js-pure": "^3.38.1",
     "date-fns": "^3.6.0",
     "dayjs": "^1.11.12",
     "emailjs-com": "^3.2.0",
