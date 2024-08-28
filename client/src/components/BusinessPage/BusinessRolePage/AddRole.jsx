@@ -13,7 +13,6 @@ const AddRole = () => {
 
   const [rolename, setRoleName] = useState("");
   const [wages, setWages] = useState("");
-  const [error, setError] = useState(null);
 
   const navigate = useNavigate();
 
@@ -41,7 +40,6 @@ const AddRole = () => {
       }
     } catch (err) {
       console.log(err);
-      setError("Error adding roles");
     }
   };
 

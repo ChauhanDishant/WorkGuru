@@ -12,7 +12,6 @@ const AddTask = () => {
       : "http://localhost:5000/";
   const [rolename, setRoleName] = useState("");
   const [wages, setWages] = useState("");
-  const [error, setError] = useState(null);
 
   const navigate = useNavigate();
 
@@ -40,7 +39,6 @@ const AddTask = () => {
       }
     } catch (err) {
       console.log(err);
-      setError("Error adding Tasks");
     }
   };
 

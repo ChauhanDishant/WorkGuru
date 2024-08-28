@@ -12,9 +12,6 @@ const AddDepartment = () => {
   const [selectedWorkerCount, setSelectedWorkerCount] = useState(1);
   const [selectedWorkers, setSelectedWorkers] = useState([]);
 
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-
   useEffect(() => {
     const fetchWorkers = async () => {
       axios.defaults.baseURL =
