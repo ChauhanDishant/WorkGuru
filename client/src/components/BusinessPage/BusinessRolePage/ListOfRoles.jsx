@@ -25,7 +25,10 @@ const ListOfRoles = () => {
 
   useEffect(() => {
     const fetchRoles = async () => {
-      axios.defaults.baseURL = "http://localhost:5000/";
+      axios.defaults.baseURL =
+        process.env.NODE_ENV === "production"
+          ? "https://workguru-server.onrender.com"
+          : "http://localhost:5000/";
       try {
         const res = await axios.get("/workguru/business/listofroles", {
           headers: {

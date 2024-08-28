@@ -21,8 +21,12 @@ const ListOfProduct = () => {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      axios.defaults.baseURL = "http://localhost:5000/";
-      try {
+      axios.defaults.baseURL =
+        process.env.NODE_ENV === "production"
+          ? "https://workguru-server.onrender.com"
+          : "http://localhost:5000/";
+      
+          try {
         const res = await axios.get("/workguru/business/listofproducts", {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -54,7 +58,7 @@ const ListOfProduct = () => {
   if (error) {
     return <ErrorDisplay message={error} />;
   }
-  
+
   // ------------------ Edit Function Starts -------------------------
   const handleEdit = (productId) => {
     navigate(`/business/editproducts/${productId}`);

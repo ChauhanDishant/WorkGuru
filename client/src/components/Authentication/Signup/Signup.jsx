@@ -31,7 +31,10 @@ const Signup = () => {
 
   const navigate = useNavigate();
 
-  axios.defaults.baseURL = "http://localhost:5000/";
+  axios.defaults.baseURL =
+    process.env.NODE_ENV === "production"
+      ? "https://workguru-server.onrender.com"
+      : "http://localhost:5000/";
 
   const handleSignup = async (e) => {
     e.preventDefault();

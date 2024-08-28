@@ -22,7 +22,10 @@ const AddAttendance = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      axios.defaults.baseURL = "http://localhost:5000/";
+      axios.defaults.baseURL =
+        process.env.NODE_ENV === "production"
+          ? "https://workguru-server.onrender.com"
+          : "http://localhost:5000/";
       try {
         const workersResponse = await axios.get(
           "/workguru/business/listofworkers",
@@ -160,8 +163,10 @@ const AddAttendance = () => {
   // Handle the confirmation logic here
   const handleConfirmAttendance = async () => {
     try {
-      axios.defaults.baseURL = "http://localhost:5000/";
-
+      axios.defaults.baseURL =
+        process.env.NODE_ENV === "production"
+          ? "https://workguru-server.onrender.com"
+          : "http://localhost:5000/";
       // Collect attendance data for all workers
       const workersData = filteredWorkers.map((worker) => ({
         worker: worker._id,

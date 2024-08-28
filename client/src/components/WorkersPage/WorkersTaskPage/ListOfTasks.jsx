@@ -24,7 +24,10 @@ const ListOfTasks = () => {
 
   useEffect(() => {
     const fetchRoles = async () => {
-      axios.defaults.baseURL = "http://localhost:5000/";
+      axios.defaults.baseURL =
+        process.env.NODE_ENV === "production"
+          ? "https://workguru-server.onrender.com"
+          : "http://localhost:5000/";
       try {
         const res = await axios.get("/workguru/business/listofroles", {
           headers: {
@@ -75,7 +78,7 @@ const ListOfTasks = () => {
         toast.success(res.data.message);
         setRoles(roles.filter((role) => role._id !== roleId));
       }
-    }catch (err) {
+    } catch (err) {
       console.error("Error fetching data:", err);
       setError(err.message || "An error occurred while fetching data");
       toast.error(err.message || "An error occurred while fetching data");

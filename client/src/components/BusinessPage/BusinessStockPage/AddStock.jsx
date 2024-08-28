@@ -6,7 +6,10 @@ import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router";
 
 const AddStock = () => {
-  axios.defaults.baseURL = "http://localhost:5000/";
+  axios.defaults.baseURL =
+    process.env.NODE_ENV === "production"
+      ? "https://workguru-server.onrender.com"
+      : "http://localhost:5000/";
 
   const [products, setProducts] = useState([]);
 
@@ -18,7 +21,10 @@ const AddStock = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.defaults.baseURL = "http://localhost:5000/";
+    axios.defaults.baseURL =
+      process.env.NODE_ENV === "production"
+        ? "https://workguru-server.onrender.com"
+        : "http://localhost:5000/";
     const fetchProducts = async () => {
       try {
         const res = await axios.get("/workguru/business/listofproducts", {
@@ -47,7 +53,10 @@ const AddStock = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    axios.defaults.baseURL = "http://localhost:5000/";
+    axios.defaults.baseURL =
+      process.env.NODE_ENV === "production"
+        ? "https://workguru-server.onrender.com"
+        : "http://localhost:5000/";
 
     try {
       const token = localStorage.getItem("token");

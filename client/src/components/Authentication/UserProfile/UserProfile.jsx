@@ -19,7 +19,11 @@ const UserProfile = () => {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    axios.defaults.baseURL = "http://localhost:5000/";
+    axios.defaults.baseURL =
+      process.env.NODE_ENV === "production"
+        ? "https://workguru-server.onrender.com"
+        : "http://localhost:5000/";
+
     const fetchUserData = async () => {
       const token = localStorage.getItem("token");
       try {

@@ -6,8 +6,10 @@ import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router";
 
 const AddTask = () => {
-  axios.defaults.baseURL = "http://localhost:5000/";
-
+  axios.defaults.baseURL =
+    process.env.NODE_ENV === "production"
+      ? "https://workguru-server.onrender.com"
+      : "http://localhost:5000/";
   const [rolename, setRoleName] = useState("");
   const [wages, setWages] = useState("");
   const [error, setError] = useState(null);

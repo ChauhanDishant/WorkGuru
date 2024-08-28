@@ -29,7 +29,10 @@ const AddRetailer = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    axios.defaults.baseURL = "http://localhost:5000/";
+    axios.defaults.baseURL =
+      process.env.NODE_ENV === "production"
+        ? "https://workguru-server.onrender.com"
+        : "http://localhost:5000/";
 
     const storenamePattern = /^[a-zA-ZÀ-ÿ\s'-]+$/;
     const firstnamePattern = /^[a-zA-ZÀ-ÿ\s'-]+$/;
@@ -128,8 +131,8 @@ const AddRetailer = () => {
   return (
     <BusinessSideBarPage>
       <Helmet>
-          <title>Retailers Section</title>
-        </Helmet>
+        <title>Retailers Section</title>
+      </Helmet>
       <div className="bg-[#e2d7c5] border rounded-lg px-8 py-6 mx-auto my-3 max-w-3xl shadow-lg">
         <h2 className="text-2xl text-[#825538] font-medium mb-4 text-center">
           Retail Application Form

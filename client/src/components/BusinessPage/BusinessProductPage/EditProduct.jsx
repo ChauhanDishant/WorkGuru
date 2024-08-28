@@ -17,7 +17,10 @@ const EditProduct = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [images, setImages] = useState([]); // State to manage selected images
 
-  axios.defaults.baseURL = "http://localhost:5000/";
+  axios.defaults.baseURL =
+    process.env.NODE_ENV === "production"
+      ? "https://workguru-server.onrender.com"
+      : "http://localhost:5000/";
 
   useEffect(() => {
     const fetchProductRoles = async () => {

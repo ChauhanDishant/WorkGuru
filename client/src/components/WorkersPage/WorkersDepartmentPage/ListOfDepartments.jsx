@@ -17,7 +17,12 @@ const ListOfDepartments = () => {
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
-      axios.defaults.baseURL = "http://localhost:5000/";
+
+      axios.defaults.baseURL =
+        process.env.NODE_ENV === "production"
+          ? "https://workguru-server.onrender.com"
+          : "http://localhost:5000/";
+
       const token = localStorage.getItem("token");
 
       try {

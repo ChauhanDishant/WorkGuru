@@ -32,8 +32,11 @@ const ListOfWorkers = () => {
   useEffect(() => {
     const fetchWorkers = async () => {
       try {
-        axios.defaults.baseURL = "http://localhost:5000/";
-
+        axios.defaults.baseURL =
+          process.env.NODE_ENV === "production"
+            ? "https://workguru-server.onrender.com"
+            : "http://localhost:5000/";
+            
         const res = await axios.get("/workguru/business/listofworkers", {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,

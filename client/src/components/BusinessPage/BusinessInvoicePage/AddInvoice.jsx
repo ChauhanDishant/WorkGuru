@@ -36,7 +36,10 @@ const AddInvoice = () => {
   const [stocks, setStocks] = useState([]);
 
   useEffect(() => {
-    axios.defaults.baseURL = "http://localhost:5000/";
+    axios.defaults.baseURL =
+      process.env.NODE_ENV === "production"
+        ? "https://workguru-server.onrender.com"
+        : "http://localhost:5000/";
 
     const fetchRetailers = async () => {
       try {
@@ -232,7 +235,11 @@ const AddInvoice = () => {
   // Getting the New Invoice Number
   useEffect(() => {
     const FetchingNextInvoiceNumber = async () => {
-      axios.defaults.baseURL = "http://localhost:5000/";
+      axios.defaults.baseURL =
+        process.env.NODE_ENV === "production"
+          ? "https://workguru-server.onrender.com"
+          : "http://localhost:5000/";
+
       try {
         // First, get the next invoice number
         const res = await axios.get(

@@ -9,8 +9,11 @@ import { useGoogleLogin } from "@react-oauth/google";
 const Login = () => {
   const navigate = useNavigate();
 
-  axios.defaults.baseURL = "http://localhost:5000/";
-
+  axios.defaults.baseURL =
+    process.env.NODE_ENV === "production"
+      ? "https://workguru-server.onrender.com"
+      : "http://localhost:5000/";
+      
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [otp, setOtp] = useState(["", "", "", ""]);

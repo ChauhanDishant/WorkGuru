@@ -21,7 +21,10 @@ const ListofInvoices = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios.defaults.baseURL = "http://localhost:5000/";
+    axios.defaults.baseURL =
+      process.env.NODE_ENV === "production"
+        ? "https://workguru-server.onrender.com"
+        : "http://localhost:5000/";
 
     const fetchInvoices = async () => {
       try {
@@ -209,7 +212,10 @@ const ListofInvoices = () => {
   };
 
   const handleEditSubmit = async (e) => {
-    axios.defaults.baseURL = "http://localhost:5000/";
+    axios.defaults.baseURL =
+      process.env.NODE_ENV === "production"
+        ? "https://workguru-server.onrender.com"
+        : "http://localhost:5000/";
     e.preventDefault();
     try {
       if (!editInvoice) {

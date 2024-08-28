@@ -19,8 +19,10 @@ const AddWorker = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    axios.defaults.baseURL = "http://localhost:5000/";
-
+    axios.defaults.baseURL =
+    process.env.NODE_ENV === "production"
+      ? "https://workguru-server.onrender.com"
+      : "http://localhost:5000/";
     const namePattern = /^[a-zA-Z\s]+$/;
     const agePattern = /^(?:[1-9][0-9]?|1[01][0-9]|120)$/;
     const phoneNumberPattern = /^\d{10}$/;

@@ -20,7 +20,11 @@ const EmployeeLoan = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        axios.defaults.baseURL = "http://localhost:5000/";
+        axios.defaults.baseURL =
+          process.env.NODE_ENV === "production"
+            ? "https://workguru-server.onrender.com"
+            : "http://localhost:5000/";
+
         setIsLoading(true);
         const response = await axios.get("/workguru/business/listofworkers", {
           headers: {
