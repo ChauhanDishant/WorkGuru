@@ -12,15 +12,7 @@ const allowedOrigins = [
   "https://workguru-client.onrender.com",
 ];
 
-app.use(
-  express.static("public", {
-    setHeaders: (res, path) => {
-      if (path.endsWith(".css")) {
-        res.setHeader("Content-Type", "text/css");
-      }
-    },
-  })
-);
+app.use(express.static(__dirname + "/public"));
 
 const corsOptions = {
   origin: function (origin, callback) {
