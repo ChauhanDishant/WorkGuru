@@ -87,11 +87,7 @@ const Login = () => {
 
   const handleGoogleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
-      axios.defaults.baseURL =
-        process.env.NODE_ENV === "production"
-          ? "https://workguru-server.onrender.com"
-          : "http://localhost:5000/";
-
+      axios.defaults.baseURL = "http://localhost:5000/";
       try {
         const userInfo = await axios.get(
           "https://www.googleapis.com/oauth2/v3/userinfo",
@@ -256,7 +252,7 @@ const Login = () => {
             <div
               className="m-12 xl:m-16 w-full bg-contain bg-center bg-no-repeat"
               style={{
-                backgroundImage: 'url("./Login_image.svg")',
+                backgroundImage: 'url("/Login_image.svg")',
               }}
             ></div>
           </div>
