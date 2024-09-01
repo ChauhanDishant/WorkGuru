@@ -13,7 +13,7 @@ const Login = () => {
     process.env.NODE_ENV === "production"
       ? "https://workguru-server.onrender.com"
       : "http://localhost:5000/";
-      
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [otp, setOtp] = useState(["", "", "", ""]);
@@ -87,7 +87,11 @@ const Login = () => {
 
   const handleGoogleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
-      axios.defaults.baseURL = "http://localhost:5000/";
+      axios.defaults.baseURL =
+        process.env.NODE_ENV === "production"
+          ? "https://workguru-server.onrender.com"
+          : "http://localhost:5000/";
+
       try {
         const userInfo = await axios.get(
           "https://www.googleapis.com/oauth2/v3/userinfo",
