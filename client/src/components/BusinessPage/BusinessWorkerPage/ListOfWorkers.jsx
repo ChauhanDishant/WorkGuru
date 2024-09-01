@@ -36,7 +36,7 @@ const ListOfWorkers = () => {
           process.env.NODE_ENV === "production"
             ? "https://workguru-server.onrender.com"
             : "http://localhost:5000/";
-            
+
         const res = await axios.get("/workguru/business/listofworkers", {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -433,7 +433,7 @@ const ListOfWorkers = () => {
         ) : (
           <>
             <div className="bg-white border rounded-lg px-8 py-6 mx-auto my-3 max-w-4xl shadow-lg">
-              <h2 className="text-2xl font-bold mb-4 text-center">
+              <h2 className="text-2xl text-blue-600 font-bold mb-4 text-center">
                 List of Workers
               </h2>
               <div className="my-4 bg-blue-500 h-[1.1px]"></div>

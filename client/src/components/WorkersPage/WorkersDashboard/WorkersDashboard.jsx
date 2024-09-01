@@ -155,13 +155,6 @@ const WorkersDashboard = () => {
   return (
     <>
       <WorkersSideBarPage>
-        <button
-          className="bg-blue-500 text-white font-medium px-4 py-2 rounded-lg hover:bg-blue-600"
-          onClick={isFullscreen ? exitFullscreen : requestFullscreen}
-        >
-          {isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
-        </button>
-
         <Helmet>
           <title>WorkGuru - Dashboard</title>
           <link

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Helmet } from "react-helmet";
 import { Link, useNavigate } from "react-router-dom";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import useFullscreen from "../../useFullScreen/useFullScreen";
 
 const WorkersSideBarPage = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -11,6 +12,8 @@ const WorkersSideBarPage = ({ children }) => {
   const [isEmployeeStatusSubmenuOpen, setisEmployeeStatusSubmenuOpen] =
     useState(false);
   const [isLoanSubmenuOpen, setIsLoanSubmenuOpen] = useState(false);
+
+  const { isFullscreen, requestFullscreen, exitFullscreen } = useFullscreen();
 
   const navigate = useNavigate();
   const handleLogOut = () => {
@@ -340,11 +343,23 @@ const WorkersSideBarPage = ({ children }) => {
         </div>
         {/* Main Content Area */}
         <div
-          className={`flex-1 p-4 ${
+          className={`flex-1 transition-all duration-300 ease-in-out ${
             isSidebarOpen ? "ml-[300px]" : "ml-0"
           } lg:ml-[300px]`}
-        >
-          {children}
+        > 
+          <div className="flex flex-col h-full">
+            <div className="flex items-start justify-between p-2">
+              <button
+                className="bg-blue-500 text-white font-semibold px-6 py-2 rounded-lg transition-colors duration-300 ease-in-out hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                onClick={isFullscreen ? exitFullscreen : requestFullscreen}
+              >
+                {isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
+              </button>
+            </div>
+
+            {/* Main Content Area */}
+            <div className="flex-grow overflow-auto">{children}</div>
+          </div>
         </div>
       </div>
       {/* ----------------------------------------------------------------------------------- */}

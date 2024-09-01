@@ -25,8 +25,8 @@ const ListOfProduct = () => {
         process.env.NODE_ENV === "production"
           ? "https://workguru-server.onrender.com"
           : "http://localhost:5000/";
-      
-          try {
+
+      try {
         const res = await axios.get("/workguru/business/listofproducts", {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -127,7 +127,7 @@ const ListOfProduct = () => {
       </Helmet>
       <BusinessSideBarPage>
         <div className="bg-white border rounded-lg px-8 py-6 mx-auto my-3 max-w-6xl shadow-lg">
-          <h2 className="text-xl font-bold mb-4 text-center">
+          <h2 className="text-xl text-blue-600 font-bold mb-4 text-center">
             List of Products
           </h2>
           <div className="my-2 bg-blue-500 h-[1.1px]"></div>

@@ -80,6 +80,7 @@ const EmployeeLoanData = () => {
   const closeEmployeesLoanModal = () => {
     setIsEmployeesLoanModalOpen(false);
     setSelectedLoan(null);
+    window.location.reload();
   };
 
   const handlePageClick = (event) => {

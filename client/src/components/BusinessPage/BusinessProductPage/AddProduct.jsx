@@ -155,7 +155,9 @@ const AddProduct = () => {
           <title>Products Section</title>
         </Helmet>
         <div className="bg-white border rounded-lg px-8 py-6 mx-auto my-3 max-w-3xl shadow-lg">
-          <h2 className="text-2xl font-medium mb-4 text-center">Add Product</h2>
+          <h2 className="text-2xl text-blue-600 font-medium mb-4 text-center">
+            Add Product
+          </h2>
           <div className="my-2 bg-blue-500 h-[1.1px]"></div>
           <div className="rounded-lg px-2 py-6 mx-auto my-1 max-w-2xl">
             <form onSubmit={handleSubmit}>

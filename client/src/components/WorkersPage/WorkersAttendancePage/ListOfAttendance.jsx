@@ -147,7 +147,7 @@ const ListOfAttendance = () => {
               placeholder="Search by worker name"
               value={searchTerm}
               onChange={handleSearch}
-              className="m-4 w-full p-2 border border-gray-300 rounded-md"
+              className="mt-4 mb-4 w-full p-2 border border-gray-300 rounded-md"
             />
 
             {/* Table Data for the Workers */}

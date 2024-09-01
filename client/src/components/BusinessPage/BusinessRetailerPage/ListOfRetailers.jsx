@@ -279,7 +279,7 @@ const ListOfRetailers = () => {
         </div>
       ) : (
         <div className="bg-white border rounded-lg px-8 py-6 mx-auto my-3 max-w-5xl shadow-lg">
-          <h2 className="text-xl font-bold mb-4 text-center">
+          <h2 className="text-xl text-blue-600 font-bold mb-4 text-center">
             List of Retailers
           </h2>
           <div className="my-2 bg-blue-500 h-[1.1px]"></div>

@@ -213,97 +213,74 @@ const ListOfTasks = () => {
           </>
         ) : (
           <>
-            <h2 className="text-2xl font-medium mb-4 text-center">
+            <h2 className="text-3xl font-bold mb-6 text-center text-blue-600">
               List of Tasks
             </h2>
-            <div className="my-2 bg-blue-500 h-[1.1px]"></div>
-            <div className="rounded-lg px-2 py-6 mx-auto my-1 max-w-2xl">
+            <div className="my-2 bg-blue-600 h-[2px] mx-auto max-w-lg"></div>
+            <div className="rounded-lg px-4 py-6 mx-auto my-4 max-w-3xl bg-white shadow-xl">
               {/* Search Bar */}
-              <div className="mb-4">
+              <div className="mb-6">
                 <input
                   type="text"
-                  placeholder="Search by Tasks name..."
+                  placeholder="Search by Task name..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="border border-gray-300 rounded-lg p-2 w-full"
+                  className="border border-gray-300 rounded-lg p-3 w-full text-gray-600 focus:ring-2 focus:ring-blue-500"
                 />
               </div>
 
-              <div className="mx-auto w-full max-w-2xl rounded-lg border border-gray-400 bg-white shadow-lg">
-                <header className="border-b border-gray-400 px-5 py-4 text-center">
+              <div className="w-full rounded-lg border border-gray-300 bg-white shadow-md">
+                <header className="border-b border-gray-300 px-6 py-4 bg-blue-100 text-center">
                   <div className="font-bold text-xl text-gray-800">
-                    Manage Tasks
+                    <i className="fas fa-tasks mr-2"></i> Manage Tasks
                   </div>
                 </header>
 
                 <table className="w-full table-auto">
-                  <thead className="bg-gray-50 text-xs font-semibold uppercase text-gray-400">
+                  <thead className="bg-gray-100 text-xs font-semibold uppercase text-gray-600">
                     <tr>
                       <th></th>
-                      <th className="p-2">
+                      <th className="p-3">
                         <div className="text-left font-semibold">Task Name</div>
                       </th>
-                      <th className="p-2">
+                      <th className="p-3">
                         <div className="text-left font-semibold">Wages</div>
                       </th>
-                      <th className="p-2">
-                        <div className="text-center font-semibold">Action</div>
+                      <th className="p-3">
+                        <div className="text-center font-semibold">Actions</div>
                       </th>
                     </tr>
                   </thead>
 
-                  <tbody className="divide-y divide-gray-100 text-sm">
+                  <tbody className="divide-y divide-gray-200 text-sm">
                     {currentRoles.map((role) => (
                       <tr key={role._id}>
-                        <td className="p-2">
+                        <td className="p-3 text-center">
                           <input
                             type="checkbox"
-                            className="h-5 w-5"
+                            className="h-5 w-5 text-blue-600 focus:ring-blue-500 rounded"
                             value={role._id}
                             onClick={(e) => toggleCheckbox(e, role)}
                           />
                         </td>
-                        <td className="p-2">
+                        <td className="p-3">
                           <div className="font-medium text-gray-800">
                             {role.rolename}
                           </div>
                         </td>
-                        <td className="p-2">
+                        <td className="p-3">
                           <div className="text-left font-bold text-green-500">
                             Rs. {role.wages}
                           </div>
                         </td>
-                        <td className="p-2">
-                          <div className="grid grid-cols-2">
-                            <div className="flex justify-center">
-                              <button onClick={() => handleEdit(role)}>
-                                <svg
-                                  className="h-8 w-8 rounded-full p-1 hover:bg-gray-100 hover:text-blue-600"
-                                  viewBox="0 0 20 20"
-                                  fill="currentColor"
-                                >
-                                  <path d="M17.414 2.586a2 2 0 00-2.828 0l-10 10a2 2 0 00-.586 1.414V17a1 1 0 001 1h3.586a2 2 0 001.414-.586l10-10a2 2 0 000-2.828l-3.586-3.586zM12.707 5.293l-7 7L5 13l.707-1.707 7-7 1.414 1.414zm-1.414 9.414L7.5 14.5 12.5 9.5 13.793 10.793l-2.5 2.5zm-4 2h-2v-2h1.293l1.5 1.5H7.5z" />
-                                </svg>
-                              </button>
-                            </div>
-                            <div className="flex justify-center">
-                              <button
-                                onClick={() => deleteRole(role._id)}
-                                className="text-red-500"
-                              >
-                                <svg
-                                  className="h-8 w-8 rounded-full p-1 hover:bg-gray-100 hover:text-red-600"
-                                  viewBox="0 0 20 20"
-                                  fill="currentColor"
-                                >
-                                  <path
-                                    fillRule="evenodd"
-                                    d="M6 2a1 1 0 00-.883.993L5 3v1H4a1 1 0 00-.117 1.993L4 6h12a1 1 0 00.117-1.993L16 4h-1V3a1 1 0 00-.883-.993L14 2H6zM5 7v9a2 2 0 002 2h6a2 2 0 002-2V7H5z"
-                                    clipRule="evenodd"
-                                  />
-                                </svg>
-                              </button>
-                            </div>
+                        <td className="p-3">
+                          <div className="flex justify-center space-x-4">
+                            <button onClick={() => handleEdit(role)}>
+                              <i className="fas fa-edit text-blue-500 hover:text-blue-700 text-xl"></i>
+                            </button>
+                            <button onClick={() => deleteRole(role._id)}>
+                              <i className="fas fa-trash text-red-500 hover:text-red-700 text-xl"></i>
+                            </button>
                           </div>
                         </td>
                       </tr>
@@ -312,25 +289,27 @@ const ListOfTasks = () => {
                 </table>
 
                 {/* Pagination */}
-                <div className="flex justify-center mt-4">
+                <div className="flex justify-center mt-6 space-x-2">
                   {Array.from({ length: totalPages }, (_, index) => (
                     <button
                       key={index + 1}
                       onClick={() => handlePageChange(index + 1)}
-                      className={`mx-1 px-3 py-1 rounded-full ${
+                      className={`px-4 py-2 rounded-full ${
                         currentPage === index + 1
                           ? "bg-blue-500 text-white"
                           : "bg-gray-200 text-gray-700"
-                      }`}
+                      } hover:bg-blue-400 hover:text-white`}
                     >
                       {index + 1}
                     </button>
                   ))}
                 </div>
 
-                <div className="mt-4 p-4 text-lg text-center">
-                  Selected Task Count: {selected.length} | Total Wages: Rs.{" "}
-                  {total}
+                <div className="mt-6 p-6 text-lg text-center bg-blue-50 rounded-lg">
+                  <i className="fas fa-check-circle text-blue-500 mr-2"></i>{" "}
+                  Selected Task Count:{" "}
+                  <span className="font-bold">{selected.length}</span> | Total
+                  Wages: <span className="font-bold">Rs. {total}</span>
                 </div>
               </div>
             </div>

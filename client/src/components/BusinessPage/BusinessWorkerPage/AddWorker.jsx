@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { useNavigate } from "react-router";
 import { Helmet } from "react-helmet";
+import { FaRupeeSign } from "react-icons/fa";
 
 const AddWorker = () => {
   const navigate = useNavigate();
@@ -20,9 +21,9 @@ const AddWorker = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     axios.defaults.baseURL =
-    process.env.NODE_ENV === "production"
-      ? "https://workguru-server.onrender.com"
-      : "http://localhost:5000/";
+      process.env.NODE_ENV === "production"
+        ? "https://workguru-server.onrender.com"
+        : "http://localhost:5000/";
     const namePattern = /^[a-zA-Z\s]+$/;
     const agePattern = /^(?:[1-9][0-9]?|1[01][0-9]|120)$/;
     const phoneNumberPattern = /^\d{10}$/;
@@ -117,7 +118,7 @@ const AddWorker = () => {
         <title>Workers Section</title>
       </Helmet>
       <div className="bg-white border rounded-lg px-8 py-6 mx-auto my-3 max-w-3xl shadow-lg">
-        <h2 className="text-xl font-bold mb-4 text-center">
+        <h2 className="text-xl text-blue-600 font-bold mb-4 text-center">
           Workers Application Form
         </h2>
         <div className="my-2 bg-blue-500 h-[1.1px]"></div>
@@ -291,16 +292,8 @@ const AddWorker = () => {
                     Daily Wages
                   </label>
                   <div className="relative">
-                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                      <svg
-                        className="w-4 h-4 text-blue-500"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="currentColor"
-                        viewBox="0 0 18 20"
-                      >
-                        <path d="M9 20a4.55 4.55 0 0 1-2.867-8.04l3.159-2.513A2.56 2.56 0 1 0 5.56 6.4H3.56A4.552 4.552 0 0 1 9 0a4.55 4.55 0 0 1 2.867 8.04l-3.159 2.513a2.56 2.56 0 1 0 3.732 3.048H14.44A4.552 4.552 0 0 1 9 20Z" />
-                      </svg>
+                    <div className="absolute text-blue-600 inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                      <FaRupeeSign />
                     </div>
                     <input
                       type="number"

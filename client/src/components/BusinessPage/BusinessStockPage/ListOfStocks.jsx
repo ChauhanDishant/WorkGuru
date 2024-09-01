@@ -204,7 +204,7 @@ const ListOfStocks = () => {
       <div className="bg-white border rounded-lg px-8 py-6 mx-auto my-6 max-w-2xl shadow-lg">
         {editStock ? (
           <>
-            <h2 className="text-2xl font-medium mb-4 text-center">
+            <h2 className="text-2xl text-blue-600 font-medium mb-4 text-center">
               Edit Stock
             </h2>
             <form onSubmit={handleEditSubmit}>
@@ -255,7 +255,7 @@ const ListOfStocks = () => {
           </>
         ) : (
           <>
-            <h2 className="text-2xl font-medium mb-4 text-center">
+            <h2 className="text-2xl text-blue-600 font-medium mb-4 text-center">
               List of Stocks
             </h2>
             <div className="my-2 bg-blue-500 h-[1.1px]"></div>
