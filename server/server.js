@@ -9,8 +9,18 @@ const app = express();
 
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://workguru-client.onrender.com/",
+  "https://workguru-client.onrender.com",
 ];
+
+app.use(
+  express.static("public", {
+    setHeaders: (res, path) => {
+      if (path.endsWith(".css")) {
+        res.setHeader("Content-Type", "text/css");
+      }
+    },
+  })
+);
 
 const corsOptions = {
   origin: function (origin, callback) {
