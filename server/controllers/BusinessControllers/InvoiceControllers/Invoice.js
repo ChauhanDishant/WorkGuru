@@ -29,6 +29,15 @@ const addInvoices = async (req, res) => {
         .send({ message: "User is required", success: false });
     }
 
+    const existingInvoiceNumber = invoiceModel.find({
+      invoiceNumber: req.body.invoiceNumber,
+    });
+    if (existingInvoiceNumber) {
+      return res
+        .status(400)
+        .send({ message: "Invoice Number already exists", success: false });
+    }
+
     const newInvoice = new invoiceModel({
       invoiceNumber,
       customerName,
