@@ -280,7 +280,7 @@ const Signup = () => {
             <div
               className="m-4 xl:m-16 w-full bg-contain bg-center bg-no-repeat"
               style={{
-                backgroundImage: 'url("/Signup_Image.svg")',
+                backgroundImage: 'url("/Signup_Image.png")',
               }}
             ></div>
           </div>
