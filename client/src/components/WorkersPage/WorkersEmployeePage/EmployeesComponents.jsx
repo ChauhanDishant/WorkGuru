@@ -7,6 +7,7 @@ import {
   eachDayOfInterval,
   isSunday,
   subMonths,
+  isValid,
 } from "date-fns";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
@@ -119,16 +120,27 @@ const EmployeesComponents = ({ worker, attendance, loan }) => {
       0
     );
 
-    // **Calculate the total loan amount for the selected month**
-    const totalLoanAmount = loan.reduce(
-      (sum, record) =>
-        record.worker === worker._id &&
-        parseISO(record.loanDate) >= firstDay &&
-        parseISO(record.loanDate) <= lastDay
-          ? sum + (record.loanAmount || 0)
-          : sum,
-      0
-    );
+    const totalLoanAmount = loan.reduce((sum, record) => {
+      // Ensure worker._id is correctly compared (convert both to strings)
+      const workerId = worker._id.toString();
+      const recordWorkerId = record.worker.toString(); // In case record.worker is an ObjectId
+
+      // Parse the loan date
+      const loanDate = parseISO(record.loanDate);
+
+      // Ensure the date is valid
+      if (
+        recordWorkerId === workerId &&
+        isValid(loanDate) &&
+        loanDate >= firstDay &&
+        loanDate <= lastDay
+      ) {
+        // Add the loan amount (use 0 if it's undefined or null)
+        return sum + (record.loanAmount || 0);
+      }
+
+      return sum;
+    }, 0);
 
     // Calculate the final total salary by subtracting the borrowed amount from the total work done
     const totalSalary = totalWorkDone - totalBorrowed;

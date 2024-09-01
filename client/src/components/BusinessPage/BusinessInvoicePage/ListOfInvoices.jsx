@@ -458,7 +458,7 @@ const ListofInvoices = () => {
                           currentItems.map((invoice, index) => (
                             <tr key={index} className="hover:bg-gray-50">
                               <td className="py-4 px-6 whitespace-nowrap text-sm font-medium text-gray-900">
-                                {index + 1}
+                                {(currentPage - 1) * itemsPerPage + (index + 1)}
                               </td>
                               <td className="py-4 px-6 whitespace-nowrap text-sm text-gray-500">
                                 {invoice.invoiceNumber}

@@ -29,9 +29,10 @@ const addInvoices = async (req, res) => {
         .send({ message: "User is required", success: false });
     }
 
-    const existingInvoiceNumber = invoiceModel.find({
+    const existingInvoiceNumber = await invoiceModel.findOne({
       invoiceNumber: req.body.invoiceNumber,
     });
+
     if (existingInvoiceNumber) {
       return res
         .status(400)
