@@ -12,24 +12,38 @@ const allowedOrigins = [
   "https://workguru-client.onrender.com",
 ];
 
+// Serve static files
 app.use(express.static(__dirname + "/public"));
 
 const corsOptions = {
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
+    // Allow requests with no origin (mobile apps, curl, Postman, etc.)
+    if (!origin) {
+      return callback(null, true);
+    }
 
+    // Allow requests from allowed origins
     if (allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
       callback(new Error("Not allowed by CORS"));
     }
   },
-  credentials: true,
-  optionsSuccessStatus: 200,
+  credentials: true, // Allow cookies/auth headers to be sent with requests
+  optionsSuccessStatus: 200, // For legacy browsers
 };
 
+// Apply the CORS middleware
 app.use(cors(corsOptions));
+
+// Optional: Error handling for CORS issues
+app.use((err, req, res, next) => {
+  if (err.message === "Not allowed by CORS") {
+    res.status(403).json({ message: "CORS error: Access not allowed" });
+  } else {
+    next(err);
+  }
+});
 
 // Serve static files from 'uploads' directory
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
